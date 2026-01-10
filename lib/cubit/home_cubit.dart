@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../services/api_service.dart';
 import 'home_state.dart';
@@ -30,8 +32,12 @@ class HomeCubit extends Cubit<HomeState> {
         status: HomeStatus.success,
       );
     } catch (e) {
+      log("$e");
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: "Unknown error occurred, Please try again later",
+        ),
       );
     }
   }
@@ -97,8 +103,12 @@ class HomeCubit extends Cubit<HomeState> {
       final recipes = await _apiService.searchRecipes(query);
       _emitPaginatedState(allRecipes: recipes, status: HomeStatus.success);
     } catch (e) {
+      log("$e");
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: "Unknown error occurred, Please try again later",
+        ),
       );
     }
   }
@@ -120,8 +130,13 @@ class HomeCubit extends Cubit<HomeState> {
         selectedArea: null, // Reset area filter
       );
     } catch (e) {
+      log("$e");
+
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: "Unknown error occurred, Please try again later",
+        ),
       );
     }
   }
@@ -137,8 +152,13 @@ class HomeCubit extends Cubit<HomeState> {
         selectedArea: area,
       );
     } catch (e) {
+      log("$e");
+
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: "Unknown error occurred, Please try again later",
+        ),
       );
     }
   }

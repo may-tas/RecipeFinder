@@ -20,7 +20,7 @@ class AppBottomNavBar extends StatelessWidget {
       ),
       child: SafeArea(
         child: SizedBox(
-          height: 64,
+          height: 56, // Reduced from 64
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -64,10 +64,11 @@ class _NavItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16, vertical: 6), // Reduced padding
         decoration: BoxDecoration(
           color: isSelected ? AppColors.midGrey : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -75,14 +76,14 @@ class _NavItem extends StatelessWidget {
             Icon(
               icon,
               color: isSelected ? AppColors.white : AppColors.grey,
-              size: 24,
+              size: 22, // Slightly smaller icon
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
                 color: isSelected ? AppColors.white : AppColors.grey,
-                fontSize: 12,
+                fontSize: 11, // Smaller font
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

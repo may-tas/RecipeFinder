@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
 import '../../../models/recipe_model.dart';
 import '../common/recipe_grid_card.dart';
 import '../common/recipe_list_card.dart';
-import '../common/shimmer_skeleton.dart';
 
 class RecipeListView extends StatefulWidget {
   const RecipeListView({super.key});
@@ -43,6 +43,10 @@ class _RecipeListViewState extends State<RecipeListView> {
     return currentScroll >= (maxScroll * 0.9);
   }
 
+  Future<void> _onRefresh() async {
+    context.read<HomeCubit>().searchRecipes('');
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
@@ -54,17 +58,18 @@ class _RecipeListViewState extends State<RecipeListView> {
         final isLoading = state.status == HomeStatus.loading;
         final recipes = state.recipes;
 
-        if (recipes.isEmpty && isLoading) {
-          return _buildSkeletonView(state.isGridView);
-        }
-
         if (recipes.isEmpty && !isLoading) {
           return _buildEmptyState();
         }
 
-        return state.isGridView
-            ? _buildGridView(recipes, state.hasReachedMax, isLoading)
-            : _buildListView(recipes, state.hasReachedMax, isLoading);
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          color: AppColors.white,
+          backgroundColor: AppColors.darkGrey,
+          child: state.isGridView
+              ? _buildGridView(recipes, state.hasReachedMax, isLoading)
+              : _buildListView(recipes, state.hasReachedMax, isLoading),
+        );
       },
     );
   }
@@ -74,27 +79,29 @@ class _RecipeListViewState extends State<RecipeListView> {
     bool hasReachedMax,
     bool isLoading,
   ) {
-    return GridView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+    final displayRecipes = isLoading && recipes.isEmpty
+        ? List.generate(6, (i) => _createPlaceholderRecipe())
+        : recipes;
+
+    return Skeletonizer(
+      enabled: isLoading && recipes.isEmpty,
+      child: GridView.builder(
+        controller: _scrollController,
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: displayRecipes.length + (hasReachedMax || isLoading ? 0 : 1),
+        itemBuilder: (context, index) {
+          if (index >= displayRecipes.length) {
+            return const SizedBox(); // Loading more handled via Skeletonizer
+          }
+          return RecipeGridCard(recipe: displayRecipes[index]);
+        },
       ),
-      itemCount: recipes.length + (hasReachedMax || isLoading ? 0 : 1),
-      itemBuilder: (context, index) {
-        if (index >= recipes.length) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(color: AppColors.white),
-            ),
-          );
-        }
-        return RecipeGridCard(recipe: recipes[index]);
-      },
     );
   }
 
@@ -103,44 +110,37 @@ class _RecipeListViewState extends State<RecipeListView> {
     bool hasReachedMax,
     bool isLoading,
   ) {
-    return ListView.separated(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(16),
-      itemCount: recipes.length + (hasReachedMax || isLoading ? 0 : 1),
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (context, index) {
-        if (index >= recipes.length) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(color: AppColors.white),
-            ),
-          );
-        }
-        return RecipeListCard(recipe: recipes[index]);
-      },
+    final displayRecipes = isLoading && recipes.isEmpty
+        ? List.generate(6, (i) => _createPlaceholderRecipe())
+        : recipes;
+
+    return Skeletonizer(
+      enabled: isLoading && recipes.isEmpty,
+      child: ListView.separated(
+        controller: _scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: displayRecipes.length + (hasReachedMax || isLoading ? 0 : 1),
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          if (index >= displayRecipes.length) {
+            return const SizedBox(); // Loading more handled via Skeletonizer
+          }
+          return RecipeListCard(recipe: displayRecipes[index]);
+        },
+      ),
     );
   }
 
-  Widget _buildSkeletonView(bool isGridView) {
-    if (isGridView) {
-      return GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: 6,
-        itemBuilder: (_, __) => const RecipeGridCardSkeleton(),
-      );
-    }
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: 6,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (_, __) => const RecipeListCardSkeleton(),
+  Recipe _createPlaceholderRecipe() {
+    return const Recipe(
+      id: 'placeholder',
+      name: 'Loading Recipe Name',
+      category: 'Category',
+      area: 'Area',
+      instructions: 'Loading instructions...',
+      thumbUrl: '',
+      ingredients: ['Ingredient 1', 'Ingredient 2'],
+      measures: ['1 cup', '2 tbsp'],
     );
   }
 

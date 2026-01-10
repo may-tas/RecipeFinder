@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/recipe_model.dart';
@@ -19,6 +21,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         state.copyWith(status: FavoritesStatus.success, favorites: favorites),
       );
     } catch (e) {
+      log("$e");
       emit(state.copyWith(status: FavoritesStatus.failure));
     }
   }

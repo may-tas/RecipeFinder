@@ -14,7 +14,6 @@ class AppRouter {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     routes: [
-      // Shell route for bottom navigation
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
@@ -23,17 +22,18 @@ class AppRouter {
         routes: [
           GoRoute(
             path: '/',
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: HomeScreen()),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomeScreen(),
+            ),
           ),
           GoRoute(
             path: '/favorites',
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: FavoritesScreen()),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: FavoritesScreen(),
+            ),
           ),
         ],
       ),
-      // Detail route outside shell (full screen)
       GoRoute(
         path: '/details/:id',
         parentNavigatorKey: _rootNavigatorKey,
@@ -43,21 +43,33 @@ class AppRouter {
           return CustomTransitionPage(
             key: state.pageKey,
             child: RecipeDetailScreen(recipeId: id, recipe: recipe),
+            transitionDuration: const Duration(milliseconds: 300),
+            reverseTransitionDuration: const Duration(milliseconds: 250),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(1.0, 0.0);
-                  const end = Offset.zero;
-                  const curve = Curves.easeOut;
-                  var tween = Tween(
-                    begin: begin,
-                    end: end,
-                  ).chain(CurveTween(curve: curve));
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
+              // Smoother slide transition with fade
+              final slideAnimation = CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+                reverseCurve: Curves.easeInCubic,
+              );
+
+              final fadeAnimation = CurvedAnimation(
+                parent: animation,
+                curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+              );
+
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.3, 0.0), // Reduced slide distance
+                  end: Offset.zero,
+                ).animate(slideAnimation),
+                child: FadeTransition(
+                  opacity: fadeAnimation,
+                  child: child,
+                ),
+              );
+            },
           );
         },
       ),
@@ -65,7 +77,6 @@ class AppRouter {
   );
 }
 
-/// Main shell widget with bottom navigation
 class MainShell extends StatefulWidget {
   final Widget child;
 
@@ -94,7 +105,6 @@ class _MainShellState extends State<MainShell> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Sync index with current route
     final location = GoRouterState.of(context).uri.path;
     if (location == '/' && _currentIndex != 0) {
       setState(() => _currentIndex = 0);

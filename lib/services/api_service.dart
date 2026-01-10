@@ -55,26 +55,28 @@ class ApiService {
       throw ApiException('Failed to load areas');
     }
   }
-  
+
   Future<List<Recipe>> filterByCategory(String category) async {
-      final url = '$_baseUrl/filter.php?c=$category';
-      // Note: Filter endpoint returns abbreviated recipe info (id, name, thumb)
-      // We might need to fetch full details for some views, but for list view it's okay.
-      // However, Recipe.fromJson expects more fields. 
-      // We need to handle partial data or fetch details.
-      // For now, let's return what we have and handle nulls in Model or fetch details on demand.
-      // UPDATE: Recipe.fromJson handles missing fields with empty strings.
-      return _fetchRecipes(url);
+    final url = '$_baseUrl/filter.php?c=$category';
+    // Note: Filter endpoint returns abbreviated recipe info (id, name, thumb)
+    // We might need to fetch full details for some views, but for list view it's okay.
+    // However, Recipe.fromJson expects more fields.
+    // We need to handle partial data or fetch details.
+    // For now, let's return what we have and handle nulls in Model or fetch details on demand.
+    // UPDATE: Recipe.fromJson handles missing fields with empty strings.
+    return _fetchRecipes(url);
   }
 
   Future<List<Recipe>> filterByArea(String area) async {
-      final url = '$_baseUrl/filter.php?a=$area';
-      return _fetchRecipes(url);
+    final url = '$_baseUrl/filter.php?a=$area';
+    return _fetchRecipes(url);
   }
 
   Future<List<Recipe>> _fetchRecipes(String url) async {
     try {
-      final response = await client.get(Uri.parse(url));
+      final response = await client
+          .get(Uri.parse(url))
+          .timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final List<dynamic> meals = data['meals'] ?? [];
@@ -83,7 +85,7 @@ class ApiService {
         throw ApiException('Failed to load recipes: ${response.statusCode}');
       }
     } catch (e) {
-      throw ApiException('Network error: $e');
+      throw ApiException('Network error');
     }
   }
 }
