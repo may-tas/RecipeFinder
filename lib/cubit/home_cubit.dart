@@ -248,7 +248,7 @@ class HomeCubit extends Cubit<HomeState> {
     final isCurrentlySelected = state.selectedArea == area;
     if (isCurrentlySelected) {
       // Deselect
-      emit(state.copyWith(selectedArea: null));
+      emit(state.copyWith(clearSelectedArea: true));
     } else {
       // Select
       emit(state.copyWith(selectedArea: area));
@@ -261,7 +261,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (isCurrentlySelected) {
       // Deselect
-      emit(state.copyWith(selectedIngredient: null));
+      emit(state.copyWith(clearSelectedIngredient: true));
     } else {
       // Select
       emit(state.copyWith(selectedIngredient: ingredient));

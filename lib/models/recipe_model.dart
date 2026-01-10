@@ -23,7 +23,7 @@ class Recipe extends Equatable {
   final List<String> ingredients;
   @HiveField(8)
   final List<String> measures;
-  
+
   const Recipe({
     required this.id,
     required this.name,
@@ -43,7 +43,7 @@ class Recipe extends Equatable {
     for (int i = 1; i <= 20; i++) {
       final ingredient = json['strIngredient$i'];
       final measure = json['strMeasure$i'];
-      
+
       if (ingredient != null && ingredient.trim().isNotEmpty) {
         ingredients.add(ingredient);
         measures.add(measure ?? '');
@@ -62,7 +62,7 @@ class Recipe extends Equatable {
       measures: measures,
     );
   }
-  
+
   Map<String, dynamic> toJson() {
     return {
       'idMeal': id,
@@ -72,13 +72,19 @@ class Recipe extends Equatable {
       'strInstructions': instructions,
       'strMealThumb': thumbUrl,
       'strYoutube': videoUrl,
-      // Note: Reconstructing ingredients/measures into numbered fields 
-      // is complex and usually not needed for local storage if we store the whole object differently
-      // or if we just store basic fields. For Hive, it's better to use TypeAdapters.
-      // For now, this JSON is for API compatibility.
     };
   }
 
   @override
-  List<Object?> get props => [id, name, category, area, instructions, thumbUrl, videoUrl, ingredients, measures];
+  List<Object?> get props => [
+        id,
+        name,
+        category,
+        area,
+        instructions,
+        thumbUrl,
+        videoUrl,
+        ingredients,
+        measures
+      ];
 }

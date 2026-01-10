@@ -14,7 +14,6 @@ class AppColors {
   // Accent Color
   static const Color accentRed = Color(0xFFFF4444);
 
-  // Legacy aliases (for backward compatibility during migration)
   static const Color primary = white;
   static const Color secondary = grey;
   static const Color accent = lightGrey;
