@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posha/constants/app_strings.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
@@ -48,7 +49,7 @@ void showFilterBottomSheet(BuildContext context) {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Filters', style: AppTextStyles.h3),
+                      Text(AppStrings.filters, style: AppTextStyles.h3),
                       BlocBuilder<HomeCubit, HomeState>(
                         builder: (context, state) {
                           final filterCount = cubit.activeFilterCount;

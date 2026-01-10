@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posha/utils/size_config.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
 import '../../../models/recipe_model.dart';
@@ -223,11 +224,11 @@ class _RecipeListViewState extends State<RecipeListView> {
   }
 
   Recipe _createPlaceholderRecipe() {
-    return const Recipe(
+    return Recipe(
       id: 'placeholder',
-      name: 'Loading Recipe Name',
-      category: 'Category',
-      area: 'Area',
+      name: AppStrings.placeholderRecipeName,
+      category: AppStrings.placeholderCategory,
+      area: AppStrings.placeholderArea,
       instructions: 'Loading instructions...',
       thumbUrl: '',
       ingredients: ['Ingredient 1', 'Ingredient 2'],
@@ -247,7 +248,7 @@ class _RecipeListViewState extends State<RecipeListView> {
               Icon(Icons.search_off_rounded, size: 64, color: AppColors.grey),
               const SizedBox(height: 16),
               Text(
-                'No recipes found',
+                AppStrings.noRecipesFound,
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 20,
@@ -256,7 +257,7 @@ class _RecipeListViewState extends State<RecipeListView> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Try adjusting your filters',
+                AppStrings.tryAdjustingFilters,
                 style: TextStyle(color: AppColors.grey, fontSize: 14),
               ),
             ],
@@ -278,7 +279,7 @@ class _RecipeListViewState extends State<RecipeListView> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Failed to load recipes',
+            AppStrings.failedToLoadRecipes,
             style: TextStyle(
               color: AppColors.white,
               fontSize: 20,
@@ -298,7 +299,7 @@ class _RecipeListViewState extends State<RecipeListView> {
               backgroundColor: AppColors.white,
               foregroundColor: AppColors.black,
             ),
-            child: const Text('Retry'),
+            child: Text(AppStrings.retry),
           ),
         ],
       ),

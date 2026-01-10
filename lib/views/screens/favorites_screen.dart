@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/app_strings.dart';
 import '../../constants/app_text_styles.dart';
 import '../../cubit/favorites_cubit.dart';
 import '../../cubit/favorites_state.dart';
@@ -32,7 +33,7 @@ class FavoritesView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('My Favorites', style: AppTextStyles.h1),
+                Text(AppStrings.favoritesTitle, style: AppTextStyles.h1),
                 const SizedBox(height: 4),
                 BlocBuilder<FavoritesCubit, FavoritesState>(
                   builder: (context, state) {

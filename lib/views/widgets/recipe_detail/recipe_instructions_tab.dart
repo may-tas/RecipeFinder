@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
 
@@ -28,7 +29,8 @@ class RecipeInstructionsTab extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Instructions (${steps.length} steps)', style: AppTextStyles.h3),
+        Text(AppStrings.instructionsSteps(steps.length),
+            style: AppTextStyles.h3),
         const SizedBox(height: 16),
         ListView.separated(
           shrinkWrap: true,

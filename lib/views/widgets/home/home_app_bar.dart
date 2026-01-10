@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
@@ -18,7 +19,7 @@ class HomeAppBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Discover Recipes', style: AppTextStyles.h1),
+              Text(AppStrings.homeTitle, style: AppTextStyles.h1),
               BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
                   return Row(

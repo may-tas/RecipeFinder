@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -26,13 +27,13 @@ class AppBottomNavBar extends StatelessWidget {
             children: [
               _NavItem(
                 icon: Icons.home_rounded,
-                label: 'Home',
+                label: AppStrings.navHome,
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
               _NavItem(
                 icon: Icons.favorite_rounded,
-                label: 'Favorites',
+                label: AppStrings.navFavorites,
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
               ),

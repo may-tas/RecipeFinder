@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
 
@@ -16,7 +17,7 @@ class RecipeIngredientsTab extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Ingredients (${recipe.ingredients.length})',
+              AppStrings.ingredientsCount(recipe.ingredients.length),
               style: AppTextStyles.h3,
             ),
           ],

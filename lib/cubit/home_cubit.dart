@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../models/recipe_model.dart';
 import '../services/api_service.dart';
 import 'home_state.dart';
-import '../models/recipe_model.dart';
 import '../models/category_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
 
@@ -43,7 +44,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (_youtubeController != null) ...[
-          Text('Watch How to Make', style: AppTextStyles.h3),
+          Text(AppStrings.watchHowToMake, style: AppTextStyles.h3),
           const SizedBox(height: 12),
           AspectRatio(
             aspectRatio: 16 / 9,
@@ -64,7 +65,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
           ),
           const SizedBox(height: 24),
         ],
-        Text('About this Recipe', style: AppTextStyles.h3),
+        Text(AppStrings.aboutThisRecipe, style: AppTextStyles.h3),
         const SizedBox(height: 12),
         Text(
           'Enjoy making this delicious ${widget.recipe.area} ${widget.recipe.category} dish. Follow the instructions tab for a step-by-step guide.',
@@ -79,7 +80,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
             Expanded(
               child: _QuickInfoCard(
                 icon: Icons.restaurant_rounded,
-                label: 'Category',
+                label: AppStrings.labelCategory,
                 value: widget.recipe.category,
               ),
             ),
@@ -87,7 +88,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
             Expanded(
               child: _QuickInfoCard(
                 icon: Icons.public_rounded,
-                label: 'Cuisine',
+                label: AppStrings.labelCuisine,
                 value: widget.recipe.area,
               ),
             ),

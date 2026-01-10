@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/app_strings.dart';
 import '../../cubit/recipe_detail_cubit.dart';
 import '../../cubit/recipe_detail_state.dart';
 import '../../injection_container.dart';
@@ -74,7 +75,7 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
           if (recipe == null) {
             return const Center(
               child: Text(
-                'Recipe not found',
+                AppStrings.recipeNotFound,
                 style: TextStyle(color: AppColors.white),
               ),
             );
@@ -231,9 +232,9 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
         indicatorPadding: const EdgeInsets.all(4),
         dividerColor: Colors.transparent,
         tabs: const [
-          Tab(text: 'Overview'),
-          Tab(text: 'Ingredients'),
-          Tab(text: 'Instructions'),
+          Tab(text: AppStrings.tabOverview),
+          Tab(text: AppStrings.tabIngredients),
+          Tab(text: AppStrings.tabInstructions),
         ],
       ),
     );

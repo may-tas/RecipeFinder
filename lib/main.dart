@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'constants/app_strings.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/favorites_cubit.dart';
 import 'utils/app_router.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'Recipe Finder',
+        title: AppStrings.appTitle,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
         routerConfig: router,
