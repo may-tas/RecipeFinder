@@ -4,6 +4,8 @@ import '../models/category_model.dart';
 
 enum HomeStatus { initial, loading, success, failure }
 
+enum SortOrder { aToZ, zToA }
+
 class HomeState extends Equatable {
   final HomeStatus status;
   final List<Recipe> recipes; // Currently displayed recipes
@@ -18,6 +20,8 @@ class HomeState extends Equatable {
   final String? selectedIngredient;
   final bool isGridView;
   final String errorMessage;
+  final bool isLoadingMore;
+  final SortOrder sortOrder;
 
   const HomeState({
     this.status = HomeStatus.initial,
@@ -33,9 +37,8 @@ class HomeState extends Equatable {
     this.isGridView = true,
     this.errorMessage = '',
     this.isLoadingMore = false,
+    this.sortOrder = SortOrder.aToZ,
   });
-
-  final bool isLoadingMore;
 
   HomeState copyWith({
     HomeStatus? status,
@@ -51,6 +54,7 @@ class HomeState extends Equatable {
     bool? isGridView,
     String? errorMessage,
     bool? isLoadingMore,
+    SortOrder? sortOrder,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -70,6 +74,7 @@ class HomeState extends Equatable {
       isGridView: isGridView ?? this.isGridView,
       errorMessage: errorMessage ?? this.errorMessage,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      sortOrder: sortOrder ?? this.sortOrder,
     );
   }
 
@@ -88,6 +93,7 @@ class HomeState extends Equatable {
         isGridView,
         errorMessage,
         isLoadingMore,
+        sortOrder,
       ];
 }
 

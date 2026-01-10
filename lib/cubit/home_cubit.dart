@@ -21,8 +21,8 @@ class HomeCubit extends Cubit<HomeState> {
       final categories = await _apiService.getCategories();
       final areas = await _apiService.getAreas();
       final ingredients = await _apiService.getIngredients();
-      // Load initial recipes (e.g., 'c' for Chicken/Cake)
-      final recipes = await _apiService.getRecipesByFirstLetter('c');
+      // Load all recipes from a-z
+      final recipes = await _apiService.getAllRecipes();
 
       _initialFeedRecipes = recipes;
 
@@ -105,7 +105,20 @@ class HomeCubit extends Cubit<HomeState> {
           .toList();
     }
 
+    // Apply sorting
+    filtered = _sortRecipes(filtered);
+
     return filtered;
+  }
+
+  // Sort recipes based on current sort order
+  List<Recipe> _sortRecipes(List<Recipe> recipes) {
+    final sorted = List<Recipe>.from(recipes);
+    sorted.sort((a, b) {
+      final comparison = a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      return state.sortOrder == SortOrder.aToZ ? comparison : -comparison;
+    });
+    return sorted;
   }
 
   // Re-apply current filters to the initial feed
@@ -267,5 +280,12 @@ class HomeCubit extends Cubit<HomeState> {
 
   void toggleViewMode() {
     emit(state.copyWith(isGridView: !state.isGridView));
+  }
+
+  void toggleSortOrder() {
+    final newSortOrder =
+        state.sortOrder == SortOrder.aToZ ? SortOrder.zToA : SortOrder.aToZ;
+    emit(state.copyWith(sortOrder: newSortOrder));
+    _reapplyFilters();
   }
 }

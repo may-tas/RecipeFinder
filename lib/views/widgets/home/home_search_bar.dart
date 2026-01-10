@@ -20,6 +20,8 @@ class HomeSearchBar extends StatelessWidget {
           child: AppSearchBar(
             hintText: 'Search recipes...',
             onChanged: (query) => cubit.searchRecipes(query),
+            onSortTap: () => cubit.toggleSortOrder(),
+            isSortedAscending: state.sortOrder == SortOrder.aToZ,
             onFilterTap: () => showFilterBottomSheet(context),
             filterCount: filterCount,
           ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import '../models/recipe_model.dart';
 import '../models/category_model.dart';
@@ -89,6 +90,24 @@ class ApiService {
   Future<List<Recipe>> filterByIngredient(String ingredient) async {
     final url = '$_baseUrl/filter.php?i=$ingredient';
     return _fetchRecipes(url);
+  }
+
+  // Fetch all recipes by making parallel requests for a-z
+  Future<List<Recipe>> getAllRecipes() async {
+    final letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+    // Fetch all letters in parallel
+    final results = await Future.wait(
+      letters.map((letter) => getRecipesByFirstLetter(letter).catchError((e) {
+            log('Failed to fetch recipes for letter $letter: $e');
+            return <Recipe>[]; // Return empty list on error
+          })),
+    );
+
+    // Flatten the list of lists into a single list
+    final allRecipes = results.expand((recipes) => recipes).toList();
+
+    return allRecipes;
   }
 
   Future<List<Recipe>> _fetchRecipes(String url) async {

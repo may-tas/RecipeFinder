@@ -7,7 +7,9 @@ class AppSearchBar extends StatefulWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onFilterTap;
+  final VoidCallback? onSortTap;
   final int filterCount;
+  final bool isSortedAscending;
   final Duration debounceDuration;
 
   const AppSearchBar({
@@ -15,7 +17,9 @@ class AppSearchBar extends StatefulWidget {
     this.hintText = 'Search recipes...',
     this.onChanged,
     this.onFilterTap,
+    this.onSortTap,
     this.filterCount = 0,
+    this.isSortedAscending = true,
     this.debounceDuration = const Duration(milliseconds: 500),
   });
 
@@ -106,6 +110,24 @@ class _AppSearchBarState extends State<AppSearchBar> {
                   color: AppColors.grey,
                   onPressed: _clearSearch,
                 ),
+              if (widget.onSortTap != null) ...[
+                Container(
+                  height: 24,
+                  width: 1,
+                  color: AppColors.midGrey,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                ),
+                IconButton(
+                  icon: AnimatedRotation(
+                    turns: widget.isSortedAscending ? 0 : 0.5,
+                    duration: const Duration(milliseconds: 300),
+                    child: const Icon(Icons.sort_by_alpha_rounded),
+                  ),
+                  color: AppColors.grey,
+                  onPressed: widget.onSortTap,
+                  tooltip: widget.isSortedAscending ? 'A-Z' : 'Z-A',
+                ),
+              ],
               if (widget.onFilterTap != null) ...[
                 Container(
                   height: 24,
