@@ -6,7 +6,6 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../cubit/favorites_cubit.dart';
 import '../../cubit/favorites_state.dart';
-import '../../injection_container.dart';
 import '../widgets/common/recipe_list_card.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -14,10 +13,7 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => locator<FavoritesCubit>(),
-      child: const FavoritesView(),
-    );
+    return const FavoritesView();
   }
 }
 

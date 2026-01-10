@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'cubit/home_cubit.dart';
+import 'cubit/favorites_cubit.dart';
 import 'utils/app_router.dart';
 import 'utils/app_theme.dart';
 import 'injection_container.dart' as di;
@@ -20,11 +23,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = AppRouter.router;
 
-    return MaterialApp.router(
-      title: 'Recipe Finder',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      routerConfig: router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeCubit>(
+          create: (context) => di.locator<HomeCubit>(),
+        ),
+        BlocProvider<FavoritesCubit>(
+          create: (context) => di.locator<FavoritesCubit>(),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Recipe Finder',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        routerConfig: router,
+      ),
     );
   }
 }

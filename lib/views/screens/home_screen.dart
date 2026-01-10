@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../cubit/home_cubit.dart';
-import '../../injection_container.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/home_search_bar.dart';
 import '../widgets/home/category_selector.dart';
@@ -12,10 +9,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => locator<HomeCubit>(),
-      child: const HomeView(),
-    );
+    return const HomeView();
   }
 }
 
