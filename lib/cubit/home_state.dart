@@ -46,8 +46,8 @@ class HomeState extends Equatable {
     List<String>? areas,
     List<String>? ingredients,
     String? selectedCategory,
-    String? selectedArea,
-    String? selectedIngredient,
+    Object? selectedArea = _undefined,
+    Object? selectedIngredient = _undefined,
     bool? isGridView,
     String? errorMessage,
     bool? isLoadingMore,
@@ -61,8 +61,12 @@ class HomeState extends Equatable {
       areas: areas ?? this.areas,
       ingredients: ingredients ?? this.ingredients,
       selectedCategory: selectedCategory ?? this.selectedCategory,
-      selectedArea: selectedArea ?? this.selectedArea,
-      selectedIngredient: selectedIngredient ?? this.selectedIngredient,
+      selectedArea: selectedArea == _undefined
+          ? this.selectedArea
+          : selectedArea as String?,
+      selectedIngredient: selectedIngredient == _undefined
+          ? this.selectedIngredient
+          : selectedIngredient as String?,
       isGridView: isGridView ?? this.isGridView,
       errorMessage: errorMessage ?? this.errorMessage,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
@@ -86,3 +90,6 @@ class HomeState extends Equatable {
         isLoadingMore,
       ];
 }
+
+// Sentinel value for optional nullable parameters
+const Object _undefined = Object();

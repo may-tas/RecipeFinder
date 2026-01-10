@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -56,6 +58,7 @@ void showFilterBottomSheet(BuildContext context) {
                           return GestureDetector(
                             onTap: () {
                               cubit.clearFilters();
+                              log("Cleared All");
                               Navigator.pop(context);
                             },
                             child: Container(

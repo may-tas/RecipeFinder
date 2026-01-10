@@ -19,12 +19,12 @@ class CategorySelector extends StatelessWidget {
         if (state.categories.isEmpty && state.status == HomeStatus.loading) {
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 12),
-            height: 50,
+            height: 40,
             child: Skeletonizer(
               enabled: true,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.getPercentSize(3),
+                  horizontal: SizeConfig.getPercentSize(4),
                 ),
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
@@ -39,7 +39,7 @@ class CategorySelector extends StatelessWidget {
         }
 
         return Container(
-          height: 50,
+          height: 40,
           margin: const EdgeInsets.symmetric(vertical: 12),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 16),

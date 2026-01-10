@@ -53,6 +53,8 @@ class HomeCubit extends Cubit<HomeState> {
     String? selectedCategory,
     String? selectedArea,
     String? selectedIngredient,
+    bool clearSelectedArea = false,
+    bool clearSelectedIngredient = false,
   }) {
     final firstPage = allRecipes.take(_pageSize).toList();
     emit(
@@ -65,9 +67,56 @@ class HomeCubit extends Cubit<HomeState> {
         areas: areas ?? state.areas,
         ingredients: ingredients ?? state.ingredients,
         selectedCategory: selectedCategory ?? state.selectedCategory,
-        selectedArea: selectedArea ?? state.selectedArea,
-        selectedIngredient: selectedIngredient ?? state.selectedIngredient,
+        selectedArea:
+            clearSelectedArea ? null : (selectedArea ?? state.selectedArea),
+        selectedIngredient: clearSelectedIngredient
+            ? null
+            : (selectedIngredient ?? state.selectedIngredient),
       ),
+    );
+  }
+
+  // Apply all active filters to a recipe list
+  List<Recipe> _applyFilters(List<Recipe> recipes) {
+    List<Recipe> filtered = recipes;
+
+    // Filter by category
+    if (state.selectedCategory != 'All') {
+      filtered = filtered
+          .where((r) =>
+              r.category.toLowerCase() == state.selectedCategory.toLowerCase())
+          .toList();
+    }
+
+    // Filter by area
+    if (state.selectedArea != null) {
+      filtered = filtered
+          .where(
+              (r) => r.area.toLowerCase() == state.selectedArea!.toLowerCase())
+          .toList();
+    }
+
+    // Filter by ingredient
+    if (state.selectedIngredient != null) {
+      filtered = filtered
+          .where((r) => r.ingredients.any((ing) => ing
+              .toLowerCase()
+              .contains(state.selectedIngredient!.toLowerCase())))
+          .toList();
+    }
+
+    return filtered;
+  }
+
+  // Re-apply current filters to the initial feed
+  Future<void> _reapplyFilters() async {
+    emit(state.copyWith(status: HomeStatus.loading));
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final filtered = _applyFilters(_initialFeedRecipes);
+    _emitPaginatedState(
+      allRecipes: filtered,
+      status: HomeStatus.success,
     );
   }
 
@@ -129,242 +178,82 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> filterByCategory(String category) async {
-    emit(state.copyWith(status: HomeStatus.loading));
-    try {
-      List<Recipe> recipes;
-      if (category == 'All') {
-        recipes = _initialFeedRecipes;
-      } else {
-        recipes = await _apiService.filterByCategory(category);
-      }
+    emit(
+        state.copyWith(status: HomeStatus.loading, selectedCategory: category));
+    await Future.delayed(const Duration(milliseconds: 300));
 
-      _emitPaginatedState(
-        allRecipes: recipes,
-        status: HomeStatus.success,
-        selectedCategory: category,
-        selectedArea: null, // Reset area filter
-      );
-    } catch (e) {
-      log("$e");
-
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: "Unknown error occurred, Please try again later",
-        ),
-      );
-    }
+    final filtered = _applyFilters(_initialFeedRecipes);
+    _emitPaginatedState(
+      allRecipes: filtered,
+      status: HomeStatus.success,
+    );
   }
 
   Future<void> filterByArea(String area) async {
-    // Status is set to loading by the caller (refresh/selectArea)
-    // but we ensure it here just in case direct call
-    if (state.status != HomeStatus.loading) {
-      emit(state.copyWith(status: HomeStatus.loading));
-    }
-    try {
-      final recipes = await _apiService.filterByArea(area);
-      _emitPaginatedState(
-        allRecipes: recipes,
-        status: HomeStatus.success,
-        selectedCategory: 'All', // Reset category filter
-        selectedArea: area,
-      );
-    } catch (e) {
-      log("$e");
+    emit(state.copyWith(status: HomeStatus.loading, selectedArea: area));
+    await Future.delayed(const Duration(milliseconds: 300));
 
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: "Unknown error occurred, Please try again later",
-        ),
-      );
-    }
+    final filtered = _applyFilters(_initialFeedRecipes);
+    _emitPaginatedState(
+      allRecipes: filtered,
+      status: HomeStatus.success,
+    );
   }
 
   Future<void> refresh() async {
-    // Artificial delay to show skeleton loading state
-    // purely for UX so users see the refresh happening
     emit(state.copyWith(status: HomeStatus.loading));
     await Future.delayed(const Duration(milliseconds: 1000));
 
-    // Refresh based on current state
-    if (state.selectedArea != null) {
-      await filterByArea(state.selectedArea!);
-    } else if (state.selectedCategory != 'All') {
-      await filterByCategory(state.selectedCategory);
+    // If any filters are active, reapply them
+    if (activeFilterCount > 0) {
+      await _reapplyFilters();
     } else {
       // Reload initial data
       await _loadInitialData();
     }
   }
 
-  // Ingredient filtering is done via API, no client-side matching needed
-
-  // Apply client-side filters to recipe list
-  List<Recipe> _applyClientFilters(List<Recipe> recipes) {
-    List<Recipe> filtered = recipes;
-
-    // Filter by category
-    if (state.selectedCategory != 'All') {
-      filtered = filtered
-          .where((r) =>
-              r.category.toLowerCase() == state.selectedCategory.toLowerCase())
-          .toList();
-    }
-
-    // Filter by area
-    if (state.selectedArea != null) {
-      filtered = filtered
-          .where(
-              (r) => r.area.toLowerCase() == state.selectedArea!.toLowerCase())
-          .toList();
-    }
-
-    // Ingredient filtering is handled by API, not client-side
-    // If ingredient is selected, we fetch from API directly
-    if (state.selectedIngredient != null) {
-      // This shouldn't happen in normal flow as ingredient uses API
-      // But keep for safety
-    }
-
-    return filtered;
-  }
-
-  // Apply client-side filters with explicit state (for toggle operations)
-  List<Recipe> _applyClientFiltersWithState(
-      List<Recipe> recipes, HomeState filterState) {
-    List<Recipe> filtered = recipes;
-
-    // Filter by category
-    if (filterState.selectedCategory != 'All') {
-      filtered = filtered
-          .where((r) =>
-              r.category.toLowerCase() ==
-              filterState.selectedCategory.toLowerCase())
-          .toList();
-    }
-
-    // Filter by area
-    if (filterState.selectedArea != null) {
-      filtered = filtered
-          .where((r) =>
-              r.area.toLowerCase() == filterState.selectedArea!.toLowerCase())
-          .toList();
-    }
-
-    // Ingredient filtering is handled by API, not client-side
-    if (filterState.selectedIngredient != null) {
-      // This shouldn't happen in normal flow
-    }
-
-    return filtered;
-  }
-
-  // Clear all filters
   void clearFilters() {
-    emit(state.copyWith(
-      status: HomeStatus.loading,
-      selectedCategory: 'All',
-      selectedArea: null,
-      selectedIngredient: null,
-    ));
-
-    // Reset to initial feed
     _emitPaginatedState(
       allRecipes: _initialFeedRecipes,
       status: HomeStatus.success,
       selectedCategory: 'All',
-      selectedArea: null,
-      selectedIngredient: null,
+      clearSelectedArea: true,
+      clearSelectedIngredient: true,
     );
   }
 
-  // Toggle category selection
   void selectCategory(String category) {
-    if (state.selectedCategory == category && category != 'All') {
-      // Deselect -> go back to 'All'
-      emit(state.copyWith(
-        status: HomeStatus.loading,
-        selectedCategory: 'All',
-      ));
-    } else {
-      // Select new category
-      emit(state.copyWith(
-        status: HomeStatus.loading,
-        selectedCategory: category,
-      ));
-    }
-
-    // Apply filters on initial feed
-    final filtered = _applyClientFilters(_initialFeedRecipes);
-    _emitPaginatedState(
-      allRecipes: filtered,
-      status: HomeStatus.success,
-      selectedCategory: state.selectedCategory,
-    );
+    final newCategory =
+        (state.selectedCategory == category && category != 'All')
+            ? 'All'
+            : category;
+    filterByCategory(newCategory);
   }
 
-  // Toggle area filter
   void toggleAreaFilter(String area) {
-    // Check CURRENT state before any changes
-    final bool isCurrentlySelected = state.selectedArea == area;
-    final String? newAreaValue = isCurrentlySelected ? null : area;
-
-    emit(state.copyWith(
-      status: HomeStatus.loading,
-      selectedArea: newAreaValue,
-    ));
-
-    // Apply filters on initial feed with the NEW state
-    final tempState = state.copyWith(selectedArea: newAreaValue);
-    final filtered =
-        _applyClientFiltersWithState(_initialFeedRecipes, tempState);
-
-    _emitPaginatedState(
-      allRecipes: filtered,
-      status: HomeStatus.success,
-      selectedArea: newAreaValue,
-    );
+    final isCurrentlySelected = state.selectedArea == area;
+    if (isCurrentlySelected) {
+      // Deselect
+      emit(state.copyWith(selectedArea: null));
+    } else {
+      // Select
+      emit(state.copyWith(selectedArea: area));
+    }
+    _reapplyFilters();
   }
 
-  // Toggle ingredient filter (uses API)
   Future<void> toggleIngredientFilter(String ingredient) async {
-    // Check CURRENT state before any changes
-    final bool isCurrentlySelected = state.selectedIngredient == ingredient;
+    final isCurrentlySelected = state.selectedIngredient == ingredient;
 
     if (isCurrentlySelected) {
-      // Deselect - go back to initial feed with other filters
-      emit(state.copyWith(
-        status: HomeStatus.loading,
-        selectedIngredient: null,
-      ));
-
-      final filtered = _applyClientFilters(_initialFeedRecipes);
-      _emitPaginatedState(
-        allRecipes: filtered,
-        status: HomeStatus.success,
-        selectedIngredient: null,
-      );
+      // Deselect
+      emit(state.copyWith(selectedIngredient: null));
     } else {
-      // Select - fetch from API
-      emit(state.copyWith(status: HomeStatus.loading));
-      try {
-        final recipes = await _apiService.filterByIngredient(ingredient);
-        _emitPaginatedState(
-          allRecipes: recipes,
-          status: HomeStatus.success,
-          selectedCategory: 'All',
-          selectedArea: null,
-          selectedIngredient: ingredient,
-        );
-      } catch (e) {
-        emit(state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: 'Failed to filter by ingredient',
-        ));
-      }
+      // Select
+      emit(state.copyWith(selectedIngredient: ingredient));
     }
+    await _reapplyFilters();
   }
 
   // Get active filter count
