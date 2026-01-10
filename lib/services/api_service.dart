@@ -56,6 +56,20 @@ class ApiService {
     }
   }
 
+  Future<List<String>> getIngredients() async {
+    final response = await client.get(Uri.parse('$_baseUrl/list.php?i=list'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final List<dynamic> ingredientsJson = data['meals'] ?? [];
+      return ingredientsJson
+          .map((json) => json['strIngredient'] as String)
+          .where((ingredient) => ingredient.isNotEmpty)
+          .toList();
+    } else {
+      throw ApiException('Failed to load ingredients');
+    }
+  }
+
   Future<List<Recipe>> filterByCategory(String category) async {
     final url = '$_baseUrl/filter.php?c=$category';
     // Note: Filter endpoint returns abbreviated recipe info (id, name, thumb)
@@ -72,11 +86,15 @@ class ApiService {
     return _fetchRecipes(url);
   }
 
+  Future<List<Recipe>> filterByIngredient(String ingredient) async {
+    final url = '$_baseUrl/filter.php?i=$ingredient';
+    return _fetchRecipes(url);
+  }
+
   Future<List<Recipe>> _fetchRecipes(String url) async {
     try {
-      final response = await client
-          .get(Uri.parse(url))
-          .timeout(Duration(seconds: 15));
+      final response =
+          await client.get(Uri.parse(url)).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final List<dynamic> meals = data['meals'] ?? [];

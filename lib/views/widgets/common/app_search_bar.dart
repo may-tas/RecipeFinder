@@ -7,6 +7,7 @@ class AppSearchBar extends StatefulWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onFilterTap;
+  final int filterCount;
   final Duration debounceDuration;
 
   const AppSearchBar({
@@ -14,6 +15,7 @@ class AppSearchBar extends StatefulWidget {
     this.hintText = 'Search recipes...',
     this.onChanged,
     this.onFilterTap,
+    this.filterCount = 0,
     this.debounceDuration = const Duration(milliseconds: 500),
   });
 
@@ -112,7 +114,38 @@ class _AppSearchBarState extends State<AppSearchBar> {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.tune_rounded),
+                  icon: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      const Icon(Icons.tune_rounded),
+                      if (widget.filterCount > 0)
+                        Positioned(
+                          right: -4,
+                          top: -4,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.accentRed,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${widget.filterCount}',
+                                style: const TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                   color: AppColors.grey,
                   onPressed: widget.onFilterTap,
                 ),

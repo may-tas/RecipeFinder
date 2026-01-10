@@ -56,7 +56,7 @@ class CategorySelector extends StatelessWidget {
                 label: categoryName,
                 isSelected: isSelected,
                 onTap: () {
-                  context.read<HomeCubit>().filterByCategory(categoryName);
+                  context.read<HomeCubit>().selectCategory(categoryName);
                 },
               );
             },

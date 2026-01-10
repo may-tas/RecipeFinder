@@ -6,13 +6,10 @@ import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // Initialize Hive
   await Hive.initFlutter();
-
   // Initialize Dependency Injection
   await di.init();
-
   runApp(const MyApp());
 }
 

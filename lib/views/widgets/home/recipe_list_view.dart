@@ -6,6 +6,8 @@ import '../../../constants/app_colors.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
 import '../../../models/recipe_model.dart';
+import '../../../services/local_storage_service.dart';
+import '../../../injection_container.dart';
 import '../common/recipe_grid_card.dart';
 import '../common/recipe_list_card.dart';
 
@@ -18,16 +20,21 @@ class RecipeListView extends StatefulWidget {
 
 class _RecipeListViewState extends State<RecipeListView> {
   final ScrollController _scrollController = ScrollController();
+  late final LocalStorageService _localStorageService;
+  late final ValueNotifier<int> _favoritesNotifier;
 
   @override
   void initState() {
     super.initState();
+    _localStorageService = locator<LocalStorageService>();
+    _favoritesNotifier = ValueNotifier<int>(0);
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _favoritesNotifier.dispose();
     super.dispose();
   }
 
@@ -121,7 +128,20 @@ class _RecipeListViewState extends State<RecipeListView> {
                   if (isInitialLoading) {
                     return RecipeGridCard(recipe: _createPlaceholderRecipe());
                   }
-                  return RecipeGridCard(recipe: recipes[index]);
+                  final recipe = recipes[index];
+                  return ValueListenableBuilder<int>(
+                    valueListenable: _favoritesNotifier,
+                    builder: (context, _, __) {
+                      return RecipeGridCard(
+                        recipe: recipe,
+                        isFavorite: _localStorageService.isFavorite(recipe.id),
+                        onFavoriteToggle: () async {
+                          await _localStorageService.toggleFavorite(recipe);
+                          _favoritesNotifier.value++; // Trigger rebuild
+                        },
+                      );
+                    },
+                  );
                 },
                 childCount: gridItemCount,
               ),
@@ -183,7 +203,20 @@ class _RecipeListViewState extends State<RecipeListView> {
               return const SizedBox();
             }
           }
-          return RecipeListCard(recipe: displayRecipes[index]);
+          final recipe = displayRecipes[index];
+          return ValueListenableBuilder<int>(
+            valueListenable: _favoritesNotifier,
+            builder: (context, _, __) {
+              return RecipeListCard(
+                recipe: recipe,
+                isFavorite: _localStorageService.isFavorite(recipe.id),
+                onFavoriteToggle: () async {
+                  await _localStorageService.toggleFavorite(recipe);
+                  _favoritesNotifier.value++; // Trigger rebuild
+                },
+              );
+            },
+          );
         },
       ),
     );

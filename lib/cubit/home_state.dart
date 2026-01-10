@@ -12,8 +12,10 @@ class HomeState extends Equatable {
   final bool hasReachedMax;
   final List<Category> categories;
   final List<String> areas;
+  final List<String> ingredients;
   final String selectedCategory; // "All" or specific category
   final String? selectedArea;
+  final String? selectedIngredient;
   final bool isGridView;
   final String errorMessage;
 
@@ -24,8 +26,10 @@ class HomeState extends Equatable {
     this.hasReachedMax = false,
     this.categories = const [],
     this.areas = const [],
+    this.ingredients = const [],
     this.selectedCategory = 'All',
     this.selectedArea,
+    this.selectedIngredient,
     this.isGridView = true,
     this.errorMessage = '',
     this.isLoadingMore = false,
@@ -40,8 +44,10 @@ class HomeState extends Equatable {
     bool? hasReachedMax,
     List<Category>? categories,
     List<String>? areas,
+    List<String>? ingredients,
     String? selectedCategory,
     String? selectedArea,
+    String? selectedIngredient,
     bool? isGridView,
     String? errorMessage,
     bool? isLoadingMore,
@@ -53,8 +59,10 @@ class HomeState extends Equatable {
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       categories: categories ?? this.categories,
       areas: areas ?? this.areas,
+      ingredients: ingredients ?? this.ingredients,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       selectedArea: selectedArea ?? this.selectedArea,
+      selectedIngredient: selectedIngredient ?? this.selectedIngredient,
       isGridView: isGridView ?? this.isGridView,
       errorMessage: errorMessage ?? this.errorMessage,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
@@ -69,8 +77,10 @@ class HomeState extends Equatable {
         hasReachedMax,
         categories,
         areas,
+        ingredients,
         selectedCategory,
         selectedArea,
+        selectedIngredient,
         isGridView,
         errorMessage,
         isLoadingMore,
