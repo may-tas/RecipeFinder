@@ -81,7 +81,7 @@ void showFilterBottomSheet(BuildContext context) {
                                     size: 16,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text('Clear All',
+                                  Text(AppStrings.clearAll,
                                       style: AppTextStyles.h3.copyWith(
                                           color: AppColors.accentRed,
                                           fontSize: 14)),
@@ -104,8 +104,8 @@ void showFilterBottomSheet(BuildContext context) {
                   labelStyle: AppTextStyles.bodyMedium
                       .copyWith(fontWeight: FontWeight.w600),
                   tabs: const [
-                    Tab(text: 'Area'),
-                    Tab(text: 'Ingredient'),
+                    Tab(text: AppStrings.filterArea),
+                    Tab(text: AppStrings.filterIngredient),
                   ],
                 ),
 
@@ -152,7 +152,7 @@ class _AreaFilterTab extends StatelessWidget {
                       color: AppColors.midGrey,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text('Area Name'),
+                    child: const Text(AppStrings.placeholderAreaName),
                   );
                 },
               ),
@@ -235,7 +235,7 @@ class _IngredientFilterTab extends StatelessWidget {
                       color: AppColors.midGrey,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text('Ingredient'),
+                    child: const Text(AppStrings.placeholderIngredient),
                   );
                 },
               ),

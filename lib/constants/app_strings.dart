@@ -53,5 +53,13 @@ class AppStrings {
   static const String placeholderCategoryName = 'Category Name';
 
   // Filter Strings
-  static const String filters = "Filters";
+  static const String filters = 'Filters';
+  static const String clearAll = 'Clear All';
+  static const String filterArea = 'Area';
+  static const String filterIngredient = 'Ingredient';
+  static const String placeholderAreaName = 'Area Name';
+  static const String placeholderIngredient = 'Ingredient';
+
+  // Search
+  static const String searchRecipesHint = 'Search recipes...';
 }

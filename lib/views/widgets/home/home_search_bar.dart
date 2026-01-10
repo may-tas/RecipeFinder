@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../constants/app_strings.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
 import '../common/app_search_bar.dart';
@@ -18,7 +19,7 @@ class HomeSearchBar extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AppSearchBar(
-            hintText: 'Search recipes...',
+            hintText: AppStrings.searchRecipesHint,
             onChanged: (query) => cubit.searchRecipes(query),
             onSortTap: () => cubit.toggleSortOrder(),
             isSortedAscending: state.sortOrder == SortOrder.aToZ,
