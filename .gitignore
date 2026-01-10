@@ -1,0 +1,80 @@
+# ================================
+# Flutter / Dart
+# ================================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+.pub-cache/
+build/
+coverage/
+*.log
+.packages
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Generated files
+lib/generated_plugin_registrant.dart
+
+# ================================
+# Android
+# ================================
+android/.gradle/
+android/local.properties
+android/key.properties
+android/app/debug/
+android/app/release/
+android/app/build/
+android/.idea/
+android/*.iml
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/gradle/
+android/.settings/
+
+# Keystore files
+*.jks
+*.keystore
+
+# ================================
+# iOS
+# ================================
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/App.framework
+ios/Flutter/ephemeral/
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Runner.xcworkspace/
+
+# ================================
+# Platform folders NOT USED
+# ================================
+windows/
+linux/
+macos/
+web/
+
+# ================================
+# IDEs & Editors
+# ================================
+.vscode/
+.idea/
+*.iml
+
+# ================================
+# System Files
+# ================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ================================
+# Environment Variables
+# ================================
+.env
+.env.*
