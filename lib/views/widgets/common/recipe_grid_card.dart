@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
+import 'animated_favorite_button.dart';
 
 class RecipeGridCard extends StatefulWidget {
   final Recipe recipe;
@@ -98,9 +99,12 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: _FavoriteButton(
+                    child: AnimatedFavoriteButton(
                       isFavorite: widget.isFavorite,
                       onTap: widget.onFavoriteToggle,
+                      size: 32,
+                      iconSize: 18,
+                      showBorder: false,
                     ),
                   ),
                 ],
@@ -133,33 +137,6 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FavoriteButton extends StatelessWidget {
-  final bool isFavorite;
-  final VoidCallback? onTap;
-
-  const _FavoriteButton({required this.isFavorite, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          color: AppColors.black.withValues(alpha: 0.7),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: isFavorite ? AppColors.accentRed : AppColors.grey,
-          size: 18,
         ),
       ),
     );

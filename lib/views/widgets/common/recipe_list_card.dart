@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
+import 'animated_favorite_button.dart';
 
 class RecipeListCard extends StatelessWidget {
   final Recipe recipe;
@@ -91,19 +92,14 @@ class RecipeListCard extends StatelessWidget {
               ),
             ),
             // Favorite button
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                // Stop propagation by not calling parent onTap
-                onFavoriteToggle?.call();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? AppColors.accentRed : AppColors.grey,
-                  size: 24,
-                ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: AnimatedFavoriteButton(
+                isFavorite: isFavorite,
+                onTap: onFavoriteToggle,
+                size: 36,
+                iconSize: 20,
+                showBorder: false,
               ),
             ),
           ],

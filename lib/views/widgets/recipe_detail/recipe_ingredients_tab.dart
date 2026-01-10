@@ -14,7 +14,6 @@ class RecipeIngredientsTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Ingredients (${recipe.ingredients.length})',
@@ -22,7 +21,6 @@ class RecipeIngredientsTab extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -31,18 +29,10 @@ class RecipeIngredientsTab extends StatelessWidget {
               const Divider(color: AppColors.midGrey, height: 1),
           itemBuilder: (context, index) {
             return Container(
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
               color: index.isEven ? AppColors.darkGrey : AppColors.deepGrey,
               child: Row(
                 children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.midGrey, width: 2),
-                    ),
-                  ),
                   const SizedBox(width: 14),
                   Expanded(
                     child: Text(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../views/screens/home_screen.dart';
 import '../views/screens/favorites_screen.dart';
 import '../views/screens/recipe_detail_screen.dart';
+import '../views/widgets/image_viewer_screen.dart';
 import '../views/widgets/common/app_bottom_nav_bar.dart';
 import '../models/recipe_model.dart';
 
@@ -68,6 +69,29 @@ class AppRouter {
                   opacity: fadeAnimation,
                   child: child,
                 ),
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        path: '/image-viewer',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final imageUrl = extra['imageUrl'] as String;
+          final tag = extra['tag'] as String;
+
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: ImageViewerScreen(imageUrl: imageUrl, tag: tag),
+            transitionDuration: const Duration(milliseconds: 300),
+            reverseTransitionDuration: const Duration(milliseconds: 250),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
               );
             },
           );
