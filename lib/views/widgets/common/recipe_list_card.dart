@@ -69,12 +69,13 @@ class RecipeListCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    '${recipe.category} • ${recipe.area}',
-                    style: AppTextStyles.cardMeta,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  if (recipe.category.isNotEmpty && recipe.area.isNotEmpty)
+                    Text(
+                      '${recipe.category} • ${recipe.area}',
+                      style: AppTextStyles.cardMeta,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   if (recipe.instructions.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
@@ -91,7 +92,11 @@ class RecipeListCard extends StatelessWidget {
             ),
             // Favorite button
             GestureDetector(
-              onTap: onFavoriteToggle,
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                // Stop propagation by not calling parent onTap
+                onFavoriteToggle?.call();
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(

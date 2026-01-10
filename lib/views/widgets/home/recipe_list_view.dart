@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posha/utils/size_config.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
 import '../../../cubit/home_cubit.dart';
@@ -44,7 +45,9 @@ class _RecipeListViewState extends State<RecipeListView> {
   }
 
   Future<void> _onRefresh() async {
-    context.read<HomeCubit>().searchRecipes('');
+    // Reload the current view state
+    final cubit = context.read<HomeCubit>();
+    await cubit.refresh();
   }
 
   @override
@@ -55,11 +58,22 @@ class _RecipeListViewState extends State<RecipeListView> {
           return _buildErrorState(state.errorMessage);
         }
 
-        final isLoading = state.status == HomeStatus.loading;
+        // Show initial loading skeleton when status is loading
+        // (This happens on first load AND refresh)
+        final isInitialLoading = state.status == HomeStatus.loading;
+
+        // Show bottom spinner when pagination is active
+        final isPaginationLoading = state.isLoadingMore;
+
         final recipes = state.recipes;
 
-        if (recipes.isEmpty && !isLoading) {
-          return _buildEmptyState();
+        if (recipes.isEmpty && !isInitialLoading) {
+          return RefreshIndicator(
+            onRefresh: _onRefresh,
+            color: AppColors.white,
+            backgroundColor: AppColors.darkGrey,
+            child: _buildEmptyState(),
+          );
         }
 
         return RefreshIndicator(
@@ -67,8 +81,10 @@ class _RecipeListViewState extends State<RecipeListView> {
           color: AppColors.white,
           backgroundColor: AppColors.darkGrey,
           child: state.isGridView
-              ? _buildGridView(recipes, state.hasReachedMax, isLoading)
-              : _buildListView(recipes, state.hasReachedMax, isLoading),
+              ? _buildGridView(recipes, state.hasReachedMax, isInitialLoading,
+                  isPaginationLoading)
+              : _buildListView(recipes, state.hasReachedMax, isInitialLoading,
+                  isPaginationLoading),
         );
       },
     );
@@ -77,30 +93,54 @@ class _RecipeListViewState extends State<RecipeListView> {
   Widget _buildGridView(
     List<Recipe> recipes,
     bool hasReachedMax,
-    bool isLoading,
+    bool isInitialLoading,
+    bool isPaginationLoading,
   ) {
-    final displayRecipes = isLoading && recipes.isEmpty
-        ? List.generate(6, (i) => _createPlaceholderRecipe())
-        : recipes;
+    // Calculate item count:
+    // If initial loading -> 6 placeholders
+    // If not -> recipes.length
+    final int gridItemCount = isInitialLoading ? 6 : recipes.length;
 
     return Skeletonizer(
-      enabled: isLoading && recipes.isEmpty,
-      child: GridView.builder(
+      enabled: isInitialLoading,
+      child: CustomScrollView(
         controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: displayRecipes.length + (hasReachedMax || isLoading ? 0 : 1),
-        itemBuilder: (context, index) {
-          if (index >= displayRecipes.length) {
-            return const SizedBox(); // Loading more handled via Skeletonizer
-          }
-          return RecipeGridCard(recipe: displayRecipes[index]);
-        },
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.75,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (isInitialLoading) {
+                    return RecipeGridCard(recipe: _createPlaceholderRecipe());
+                  }
+                  return RecipeGridCard(recipe: recipes[index]);
+                },
+                childCount: gridItemCount,
+              ),
+            ),
+          ),
+          if (!isInitialLoading)
+            SliverToBoxAdapter(
+              child: isPaginationLoading
+                  ? Container(
+                      height: 60,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(
+                        color: AppColors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const SizedBox(height: 20),
+            ),
+        ],
       ),
     );
   }
@@ -108,22 +148,40 @@ class _RecipeListViewState extends State<RecipeListView> {
   Widget _buildListView(
     List<Recipe> recipes,
     bool hasReachedMax,
-    bool isLoading,
+    bool isInitialLoading,
+    bool isPaginationLoading,
   ) {
-    final displayRecipes = isLoading && recipes.isEmpty
-        ? List.generate(6, (i) => _createPlaceholderRecipe())
-        : recipes;
+    final displayRecipes = recipes;
 
     return Skeletonizer(
-      enabled: isLoading && recipes.isEmpty,
+      enabled: isInitialLoading,
       child: ListView.separated(
         controller: _scrollController,
         padding: const EdgeInsets.all(16),
-        itemCount: displayRecipes.length + (hasReachedMax || isLoading ? 0 : 1),
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: isInitialLoading
+            ? 6
+            : displayRecipes.length + (hasReachedMax ? 0 : 1),
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
+          if (isInitialLoading) {
+            return RecipeListCard(recipe: _createPlaceholderRecipe());
+          }
           if (index >= displayRecipes.length) {
-            return const SizedBox(); // Loading more handled via Skeletonizer
+            // Loading more indicator
+            if (isPaginationLoading) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(SizeConfig.getPercentSize(4)),
+                  child: CircularProgressIndicator(
+                    color: AppColors.white,
+                    strokeWidth: 2,
+                  ),
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
           }
           return RecipeListCard(recipe: displayRecipes[index]);
         },
@@ -145,26 +203,32 @@ class _RecipeListViewState extends State<RecipeListView> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.search_off_rounded, size: 64, color: AppColors.grey),
-          const SizedBox(height: 16),
-          Text(
-            'No recipes found',
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.search_off_rounded, size: 64, color: AppColors.grey),
+              const SizedBox(height: 16),
+              Text(
+                'No recipes found',
+                style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Try adjusting your filters',
+                style: TextStyle(color: AppColors.grey, fontSize: 14),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Try adjusting your filters',
-            style: TextStyle(color: AppColors.grey, fontSize: 14),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -196,7 +260,7 @@ class _RecipeListViewState extends State<RecipeListView> {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () => context.read<HomeCubit>().searchRecipes(''),
+            onPressed: () => context.read<HomeCubit>().refresh(),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.white,
               foregroundColor: AppColors.black,

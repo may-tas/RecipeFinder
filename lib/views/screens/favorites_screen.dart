@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../cubit/favorites_cubit.dart';
@@ -53,9 +54,7 @@ class FavoritesView extends StatelessWidget {
             child: BlocBuilder<FavoritesCubit, FavoritesState>(
               builder: (context, state) {
                 if (state.status == FavoritesStatus.loading) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: AppColors.white),
-                  );
+                  return _buildLoadingSkeleton();
                 }
 
                 if (state.favorites.isEmpty) {
@@ -85,9 +84,9 @@ class FavoritesView extends StatelessWidget {
                         ),
                       ),
                       onDismissed: (_) {
-                        context.read<FavoritesCubit>().removeFavorite(
-                          recipe.id,
-                        );
+                        context
+                            .read<FavoritesCubit>()
+                            .removeFavorite(recipe.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: const Text('Removed from favorites'),
@@ -96,9 +95,9 @@ class FavoritesView extends StatelessWidget {
                               label: 'Undo',
                               textColor: AppColors.white,
                               onPressed: () {
-                                context.read<FavoritesCubit>().addFavorite(
-                                  recipe,
-                                );
+                                context
+                                    .read<FavoritesCubit>()
+                                    .addFavorite(recipe);
                               },
                             ),
                           ),
@@ -108,9 +107,9 @@ class FavoritesView extends StatelessWidget {
                         recipe: recipe,
                         isFavorite: true,
                         onFavoriteToggle: () {
-                          context.read<FavoritesCubit>().removeFavorite(
-                            recipe.id,
-                          );
+                          context
+                              .read<FavoritesCubit>()
+                              .removeFavorite(recipe.id);
                         },
                       ),
                     );
@@ -120,6 +119,24 @@ class FavoritesView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return Skeletonizer(
+      enabled: true,
+      child: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: 5,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (_, __) => Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: AppColors.darkGrey,
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }
@@ -154,10 +171,8 @@ class FavoritesView extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.white,
                 foregroundColor: AppColors.black,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

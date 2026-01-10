@@ -8,7 +8,7 @@ class HomeState extends Equatable {
   final HomeStatus status;
   final List<Recipe> recipes; // Currently displayed recipes
   final List<Recipe>
-  allRecipes; // All fetched recipes (for client-side pagination)
+      allRecipes; // All fetched recipes (for client-side pagination)
   final bool hasReachedMax;
   final List<Category> categories;
   final List<String> areas;
@@ -28,7 +28,10 @@ class HomeState extends Equatable {
     this.selectedArea,
     this.isGridView = true,
     this.errorMessage = '',
+    this.isLoadingMore = false,
   });
+
+  final bool isLoadingMore;
 
   HomeState copyWith({
     HomeStatus? status,
@@ -41,6 +44,7 @@ class HomeState extends Equatable {
     String? selectedArea,
     bool? isGridView,
     String? errorMessage,
+    bool? isLoadingMore,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -53,20 +57,22 @@ class HomeState extends Equatable {
       selectedArea: selectedArea ?? this.selectedArea,
       isGridView: isGridView ?? this.isGridView,
       errorMessage: errorMessage ?? this.errorMessage,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 
   @override
   List<Object?> get props => [
-    status,
-    recipes,
-    allRecipes,
-    hasReachedMax,
-    categories,
-    areas,
-    selectedCategory,
-    selectedArea,
-    isGridView,
-    errorMessage,
-  ];
+        status,
+        recipes,
+        allRecipes,
+        hasReachedMax,
+        categories,
+        areas,
+        selectedCategory,
+        selectedArea,
+        isGridView,
+        errorMessage,
+        isLoadingMore,
+      ];
 }

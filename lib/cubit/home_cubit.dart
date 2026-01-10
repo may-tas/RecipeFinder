@@ -65,24 +65,33 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void loadMore() {
-    if (state.hasReachedMax || state.status != HomeStatus.success) return;
+  Future<void> loadMore() async {
+    // Don't load more if already loading, max reached, or no recipes
+    if (state.isLoadingMore ||
+        state.hasReachedMax ||
+        state.allRecipes.isEmpty) {
+      return;
+    }
+
+    emit(state.copyWith(isLoadingMore: true));
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     final currentLength = state.recipes.length;
-    final nextChunk = state.allRecipes
-        .skip(currentLength)
-        .take(_pageSize)
-        .toList();
+    final nextChunk =
+        state.allRecipes.skip(currentLength).take(_pageSize).toList();
 
     if (nextChunk.isEmpty) {
-      emit(state.copyWith(hasReachedMax: true));
+      emit(state.copyWith(
+        hasReachedMax: true,
+        isLoadingMore: false,
+      ));
     } else {
       emit(
         state.copyWith(
           recipes: List.of(state.recipes)..addAll(nextChunk),
-          hasReachedMax:
-              (state.recipes.length + nextChunk.length) >=
+          hasReachedMax: (state.recipes.length + nextChunk.length) >=
               state.allRecipes.length,
+          isLoadingMore: false,
         ),
       );
     }
@@ -142,7 +151,11 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> filterByArea(String area) async {
-    emit(state.copyWith(status: HomeStatus.loading));
+    // Status is set to loading by the caller (refresh/selectArea)
+    // but we ensure it here just in case direct call
+    if (state.status != HomeStatus.loading) {
+      emit(state.copyWith(status: HomeStatus.loading));
+    }
     try {
       final recipes = await _apiService.filterByArea(area);
       _emitPaginatedState(
@@ -160,6 +173,23 @@ class HomeCubit extends Cubit<HomeState> {
           errorMessage: "Unknown error occurred, Please try again later",
         ),
       );
+    }
+  }
+
+  Future<void> refresh() async {
+    // Artificial delay to show skeleton loading state
+    // purely for UX so users see the refresh happening
+    emit(state.copyWith(status: HomeStatus.loading));
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    // Refresh based on current state
+    if (state.selectedArea != null) {
+      await filterByArea(state.selectedArea!);
+    } else if (state.selectedCategory != 'All') {
+      await filterByCategory(state.selectedCategory);
+    } else {
+      // Reload initial data
+      await _loadInitialData();
     }
   }
 

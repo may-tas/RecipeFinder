@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../cubit/home_cubit.dart';
@@ -41,9 +42,27 @@ void showFilterBottomSheet(BuildContext context) {
                 child: BlocBuilder<HomeCubit, HomeState>(
                   builder: (context, state) {
                     if (state.areas.isEmpty) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.white,
+                      return Skeletonizer(
+                        enabled: true,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 2.5,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.midGrey,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text('Area Name'),
+                            );
+                          },
                         ),
                       );
                     }
@@ -51,11 +70,11 @@ void showFilterBottomSheet(BuildContext context) {
                     return GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 2.5,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                          ),
+                        crossAxisCount: 3,
+                        childAspectRatio: 2.5,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                      ),
                       itemCount: state.areas.length,
                       itemBuilder: (context, index) {
                         final area = state.areas[index];
@@ -68,17 +87,15 @@ void showFilterBottomSheet(BuildContext context) {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              gradient: isSelected
-                                  ? AppColors.buttonGradient
-                                  : null,
+                              gradient:
+                                  isSelected ? AppColors.buttonGradient : null,
                               color: isSelected ? null : AppColors.midGrey,
                               borderRadius: BorderRadius.circular(20),
                               border: isSelected
                                   ? null
                                   : Border.all(
-                                      color: AppColors.grey.withValues(
-                                        alpha: 0.3,
-                                      ),
+                                      color:
+                                          AppColors.grey.withValues(alpha: 0.3),
                                     ),
                             ),
                             child: Text(

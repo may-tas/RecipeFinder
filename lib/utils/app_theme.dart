@@ -131,7 +131,4 @@ class AppTheme {
       ),
     );
   }
-
-  // Alias for backward compatibility
-  static ThemeData get lightTheme => darkTheme;
 }

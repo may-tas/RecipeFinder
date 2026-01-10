@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:go_router/go_router.dart';
 import '../../constants/app_colors.dart';
 import '../../cubit/recipe_detail_cubit.dart';
 import '../../cubit/recipe_detail_state.dart';
@@ -11,8 +13,6 @@ import '../widgets/recipe_detail/recipe_overview_tab.dart';
 import '../widgets/recipe_detail/recipe_ingredients_tab.dart';
 import '../widgets/recipe_detail/recipe_instructions_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:go_router/go_router.dart';
-import '../widgets/image_viewer_screen.dart';
 
 class RecipeDetailScreen extends StatelessWidget {
   final String recipeId;
@@ -67,9 +67,7 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
           final recipe = state.recipe;
 
           if (recipe == null && state.status == RecipeDetailStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.white),
-            );
+            return _buildLoadingSkeleton();
           }
 
           if (recipe == null) {
@@ -110,6 +108,43 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
     );
   }
 
+  Widget _buildLoadingSkeleton() {
+    return Skeletonizer(
+      enabled: true,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: MediaQuery.of(context).size.height * 0.4,
+            pinned: true,
+            backgroundColor: AppColors.deepGrey,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(color: AppColors.midGrey),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 30,
+                    width: 200,
+                    color: AppColors.midGrey,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    height: 40,
+                    color: AppColors.midGrey,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSliverAppBar(Recipe recipe, bool isFavorite) {
     return SliverAppBar(
       expandedHeight: MediaQuery.of(context).size.height * 0.4,
@@ -131,14 +166,12 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
       flexibleSpace: FlexibleSpaceBar(
         background: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImageViewerScreen(
-                  imageUrl: recipe.thumbUrl,
-                  tag: 'recipe_image_${recipe.id}',
-                ),
-              ),
+            context.push(
+              '/image-viewer',
+              extra: {
+                'imageUrl': recipe.thumbUrl,
+                'tag': 'recipe_image_${recipe.id}',
+              },
             );
           },
           child: Stack(

@@ -64,8 +64,7 @@ class _NavItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16, vertical: 6), // Reduced padding
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.midGrey : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
@@ -76,14 +75,14 @@ class _NavItem extends StatelessWidget {
             Icon(
               icon,
               color: isSelected ? AppColors.white : AppColors.grey,
-              size: 22, // Slightly smaller icon
+              size: 22,
             ),
             const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
                 color: isSelected ? AppColors.white : AppColors.grey,
-                fontSize: 11, // Smaller font
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

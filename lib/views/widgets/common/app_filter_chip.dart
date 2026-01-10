@@ -21,8 +21,7 @@ class AppFilterChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: 8), // Reduced padding
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           gradient: isSelected ? AppColors.buttonGradient : null,
           color: isSelected ? null : AppColors.midGrey,
@@ -36,7 +35,7 @@ class AppFilterChip extends StatelessWidget {
           style: AppTextStyles.bodyMedium.copyWith(
             color: isSelected ? AppColors.black : AppColors.lightGrey,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            fontSize: 13, // Slightly smaller
+            fontSize: 13,
           ),
         ),
       ),

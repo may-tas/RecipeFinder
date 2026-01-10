@@ -32,12 +32,6 @@ class AppColors {
     colors: [deepGrey, darkGrey],
   );
 
-  static const LinearGradient cardGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF262626), darkGrey],
-  );
-
   static const LinearGradient buttonGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
