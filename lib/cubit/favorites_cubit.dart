@@ -11,6 +11,17 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   FavoritesCubit(this._localStorageService) : super(const FavoritesState()) {
     loadFavorites();
+    _localStorageService.favoritesChanged.addListener(_onFavoritesChanged);
+  }
+
+  void _onFavoritesChanged() {
+    loadFavorites();
+  }
+
+  @override
+  Future<void> close() {
+    _localStorageService.favoritesChanged.removeListener(_onFavoritesChanged);
+    return super.close();
   }
 
   void loadFavorites() {

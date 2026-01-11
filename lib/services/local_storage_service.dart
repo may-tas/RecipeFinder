@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/recipe_model.dart';
 
 class LocalStorageService {
   static const String _favoritesBoxName = 'favorites';
   final Box<Recipe>? _testBox;
+  final favoritesChanged = ValueNotifier<int>(0);
 
   LocalStorageService({Box<Recipe>? testBox}) : _testBox = testBox;
 
@@ -30,5 +32,10 @@ class LocalStorageService {
     } else {
       await _favoritesBox.put(recipe.id, recipe);
     }
+    favoritesChanged.value++;
+  }
+
+  void dispose() {
+    favoritesChanged.dispose();
   }
 }

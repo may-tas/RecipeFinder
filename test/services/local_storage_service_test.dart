@@ -70,6 +70,7 @@ void main() {
       // Arrange
       when(mockBox.containsKey('1')).thenReturn(false);
       when(mockBox.put('1', testRecipe)).thenAnswer((_) async {});
+      when(mockBox.values).thenReturn([testRecipe]);
 
       // Act
       await service.toggleFavorite(testRecipe);
@@ -77,12 +78,14 @@ void main() {
       // Assert
       verify(mockBox.put('1', testRecipe)).called(1);
       verifyNever(mockBox.delete(any));
+      expect(service.favoritesChanged.value, 1);
     });
 
     test('toggleFavorite removes recipe if already favorite', () async {
       // Arrange
       when(mockBox.containsKey('1')).thenReturn(true);
       when(mockBox.delete('1')).thenAnswer((_) async {});
+      when(mockBox.values).thenReturn([]);
 
       // Act
       await service.toggleFavorite(testRecipe);
@@ -90,6 +93,7 @@ void main() {
       // Assert
       verify(mockBox.delete('1')).called(1);
       verifyNever(mockBox.put(any, any));
+      expect(service.favoritesChanged.value, 1);
     });
   });
 }
