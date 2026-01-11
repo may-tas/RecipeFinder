@@ -44,31 +44,18 @@ class AppRouter {
           return CustomTransitionPage(
             key: state.pageKey,
             child: RecipeDetailScreen(recipeId: id, recipe: recipe),
-            transitionDuration: const Duration(milliseconds: 300),
-            reverseTransitionDuration: const Duration(milliseconds: 250),
+            transitionDuration: const Duration(milliseconds: 350),
+            reverseTransitionDuration: const Duration(milliseconds: 300),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              // Smoother slide transition with fade
-              final slideAnimation = CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-                reverseCurve: Curves.easeInCubic,
-              );
-
-              final fadeAnimation = CurvedAnimation(
-                parent: animation,
-                curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-              );
-
+              // 2. Vertical Slide (from bottom)
               return SlideTransition(
                 position: Tween<Offset>(
-                  begin: const Offset(0.3, 0.0), // Reduced slide distance
+                  begin: const Offset(0.0, 0.15),
                   end: Offset.zero,
-                ).animate(slideAnimation),
-                child: FadeTransition(
-                  opacity: fadeAnimation,
-                  child: child,
-                ),
+                ).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+                child: FadeTransition(opacity: animation, child: child),
               );
             },
           );
