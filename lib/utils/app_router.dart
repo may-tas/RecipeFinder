@@ -23,14 +23,56 @@ class AppRouter {
         routes: [
           GoRoute(
             path: '/',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: HomeScreen(),
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const HomeScreen(),
+              transitionDuration: const Duration(milliseconds: 200),
+              reverseTransitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // Slide direction based on whether we're entering or leaving
+                final isForward =
+                    secondaryAnimation.status == AnimationStatus.forward ||
+                        secondaryAnimation.status == AnimationStatus.completed;
+
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(isForward ? -0.3 : 0.3, 0.0),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  )),
+                  child: child,
+                );
+              },
             ),
           ),
           GoRoute(
             path: '/favorites',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: FavoritesScreen(),
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const FavoritesScreen(),
+              transitionDuration: const Duration(milliseconds: 200),
+              reverseTransitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // Slide direction based on whether we're entering or leaving
+                final isForward =
+                    secondaryAnimation.status == AnimationStatus.forward ||
+                        secondaryAnimation.status == AnimationStatus.completed;
+
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(isForward ? 0.3 : -0.3, 0.0),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  )),
+                  child: child,
+                );
+              },
             ),
           ),
         ],
