@@ -16,14 +16,13 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(SizeConfig.getPercentSize(5)),
       decoration: const BoxDecoration(
         color: AppColors.darkGrey,
         border: Border(top: BorderSide(color: AppColors.midGrey)),
       ),
       child: SafeArea(
         child: SizedBox(
-          height: 56, // Reduced from 64
+          height: SizeConfig.getPercentSize(14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -67,7 +66,9 @@ class _NavItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.getPercentSize(6),
+            vertical: SizeConfig.getPercentSize(2)),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.midGrey : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
@@ -80,7 +81,7 @@ class _NavItem extends StatelessWidget {
               color: isSelected ? AppColors.white : AppColors.grey,
               size: 22,
             ),
-            const SizedBox(height: 2),
+            SizedBox(height: SizeConfig.getPercentSize(0.5)),
             Text(
               label,
               style: TextStyle(

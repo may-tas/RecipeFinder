@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:posha/utils/size_config.dart';
 import 'constants/app_strings.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/favorites_cubit.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final router = AppRouter.router;
 
     return MultiBlocProvider(

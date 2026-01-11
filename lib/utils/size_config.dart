@@ -18,6 +18,6 @@ class SizeConfig {
   }
 
   static double getPercentSize(double percent) {
-    return ((screenWidth ?? 0.0) * percent) / 124;
+    return ((screenWidth ?? 0.0) * percent) / 100;
   }
 }
