@@ -112,5 +112,43 @@ void main() {
       expect(cubit.state.isGridView, false);
       cubit.close();
     });
+
+    test('clearFilters clears all selected filters', () async {
+      // Arrange
+      when(mockApiService.getAllRecipes()).thenAnswer((_) async => testRecipes);
+      when(mockApiService.getCategories())
+          .thenAnswer((_) async => testCategories);
+      when(mockApiService.getAreas()).thenAnswer((_) async => testAreas);
+      when(mockApiService.getIngredients()).thenAnswer((_) async => []);
+
+      final cubit = HomeCubit(mockApiService);
+
+      // Wait for initial load
+      await cubit.stream
+          .firstWhere((state) => state.status != HomeStatus.loading);
+
+      // Set some filters manually (simulate user selection)
+      // Since we can't easily set state directly, we rely on toggle methods or internal method logic.
+      // But toggleAreaFilter calls _reapplyFilters which emits state.
+      cubit.toggleAreaFilter('Indian');
+      await cubit.stream.firstWhere((state) => state.selectedArea == 'Indian');
+
+      // Act
+      final future = expectLater(
+        cubit.stream,
+        emits(
+          predicate<HomeState>((state) =>
+              state.selectedArea == null &&
+              state.selectedIngredient == null &&
+              state.selectedCategory == 'All'),
+        ),
+      );
+
+      cubit.clearFilters();
+
+      // Assert
+      await future;
+      cubit.close();
+    });
   });
 }

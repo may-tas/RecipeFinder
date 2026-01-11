@@ -72,6 +72,8 @@ class HomeCubit extends Cubit<HomeState> {
         selectedIngredient: clearSelectedIngredient
             ? null
             : (selectedIngredient ?? state.selectedIngredient),
+        clearSelectedArea: clearSelectedArea,
+        clearSelectedIngredient: clearSelectedIngredient,
       ),
     );
   }
