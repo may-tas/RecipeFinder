@@ -3,13 +3,18 @@ import '../models/recipe_model.dart';
 
 class LocalStorageService {
   static const String _favoritesBoxName = 'favorites';
+  final Box<Recipe>? _testBox;
+
+  LocalStorageService({Box<Recipe>? testBox}) : _testBox = testBox;
 
   Future<void> init() async {
+    if (_testBox != null) return;
     Hive.registerAdapter(RecipeAdapter());
     await Hive.openBox<Recipe>(_favoritesBoxName);
   }
 
-  Box<Recipe> get _favoritesBox => Hive.box<Recipe>(_favoritesBoxName);
+  Box<Recipe> get _favoritesBox =>
+      _testBox ?? Hive.box<Recipe>(_favoritesBoxName);
 
   List<Recipe> getFavorites() {
     return _favoritesBox.values.toList();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 
@@ -15,6 +16,7 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(SizeConfig.getPercentSize(5)),
       decoration: const BoxDecoration(
         color: AppColors.darkGrey,
         border: Border(top: BorderSide(color: AppColors.midGrey)),
