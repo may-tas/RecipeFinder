@@ -38,7 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(
           status: HomeStatus.failure,
-          errorMessage: "Unknown error occurred, Please try again later",
+          errorMessage: "Network error occurred, Please try again later",
         ),
       );
     }
