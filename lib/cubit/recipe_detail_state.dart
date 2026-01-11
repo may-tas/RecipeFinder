@@ -8,12 +8,14 @@ class RecipeDetailState extends Equatable {
   final Recipe? recipe;
   final bool isFavorite;
   final String errorMessage;
+  final bool isHydrating;
 
   const RecipeDetailState({
     this.status = RecipeDetailStatus.initial,
     this.recipe,
     this.isFavorite = false,
     this.errorMessage = '',
+    this.isHydrating = false,
   });
 
   RecipeDetailState copyWith({
@@ -21,15 +23,18 @@ class RecipeDetailState extends Equatable {
     Recipe? recipe,
     bool? isFavorite,
     String? errorMessage,
+    bool? isHydrating,
   }) {
     return RecipeDetailState(
       status: status ?? this.status,
       recipe: recipe ?? this.recipe,
       isFavorite: isFavorite ?? this.isFavorite,
       errorMessage: errorMessage ?? this.errorMessage,
+      isHydrating: isHydrating ?? this.isHydrating,
     );
   }
 
   @override
-  List<Object?> get props => [status, recipe, isFavorite, errorMessage];
+  List<Object?> get props =>
+      [status, recipe, isFavorite, errorMessage, isHydrating];
 }

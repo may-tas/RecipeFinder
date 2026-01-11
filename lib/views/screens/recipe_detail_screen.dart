@@ -67,8 +67,10 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
         },
         builder: (context, state) {
           final recipe = state.recipe;
+          final showSkeleton =
+              state.status == RecipeDetailStatus.loading || state.isHydrating;
 
-          if (recipe == null && state.status == RecipeDetailStatus.loading) {
+          if (recipe == null && showSkeleton) {
             return _buildLoadingSkeleton();
           }
 
@@ -89,16 +91,19 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
                   decoration: const BoxDecoration(
                     gradient: AppColors.backgroundGradient,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        RecipeInfoSection(recipe: recipe),
-                        const SizedBox(height: 24),
-                        _buildTabBar(),
-                        const SizedBox(height: 30),
-                        _buildTabContent(recipe),
-                      ],
+                  child: Skeletonizer(
+                    enabled: showSkeleton,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          RecipeInfoSection(recipe: recipe),
+                          const SizedBox(height: 24),
+                          _buildTabBar(),
+                          const SizedBox(height: 30),
+                          _buildTabContent(recipe),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -124,21 +129,49 @@ class _RecipeDetailViewState extends State<RecipeDetailView>
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Container(
-                    height: 30,
-                    width: 200,
-                    color: AppColors.midGrey,
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    height: 40,
-                    color: AppColors.midGrey,
-                  ),
-                ],
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: AppColors.backgroundGradient,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 32,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.midGrey,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      height: 20,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      decoration: BoxDecoration(
+                        color: AppColors.midGrey,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.midGrey,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color: AppColors.midGrey,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -11,26 +11,43 @@ class RecipeDetailCubit extends Cubit<RecipeDetailState> {
   final LocalStorageService _localStorageService;
 
   RecipeDetailCubit(this._apiService, this._localStorageService)
-    : super(const RecipeDetailState());
+      : super(const RecipeDetailState());
 
   Future<void> loadRecipe(String id, {Recipe? placeholder}) async {
+    final hasPrefetchedData = placeholder != null &&
+        placeholder.instructions.isNotEmpty &&
+        placeholder.ingredients.isNotEmpty;
+
     emit(
       state.copyWith(
-        status: RecipeDetailStatus.loading,
+        status: hasPrefetchedData
+            ? RecipeDetailStatus.success
+            : RecipeDetailStatus.loading,
         recipe: placeholder,
         isFavorite: _localStorageService.isFavorite(id),
+        isHydrating: !hasPrefetchedData,
       ),
     );
 
+    // Skip network if we already have full data (reduces first navigation lag)
+    if (hasPrefetchedData) return;
+
     try {
       final recipe = await _apiService.getRecipeById(id);
-      emit(state.copyWith(status: RecipeDetailStatus.success, recipe: recipe));
+      emit(
+        state.copyWith(
+          status: RecipeDetailStatus.success,
+          recipe: recipe,
+          isHydrating: false,
+        ),
+      );
     } catch (e) {
       log("$e");
       emit(
         state.copyWith(
           status: RecipeDetailStatus.failure,
           errorMessage: "Unknown error occurred, Please try again later",
+          isHydrating: false,
         ),
       );
     }
