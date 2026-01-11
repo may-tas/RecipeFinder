@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:posha/constants/app_strings.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
@@ -60,7 +61,7 @@ void showFilterBottomSheet(BuildContext context) {
                             onTap: () {
                               cubit.clearFilters();
                               log("Cleared All");
-                              Navigator.pop(context);
+                              context.pop();
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -176,7 +177,7 @@ class _AreaFilterTab extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   context.read<HomeCubit>().toggleAreaFilter(area);
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -265,7 +266,7 @@ class _IngredientFilterTab extends StatelessWidget {
                       .read<HomeCubit>()
                       .toggleIngredientFilter(ingredient);
                   if (context.mounted) {
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
                 child: Container(
