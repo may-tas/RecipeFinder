@@ -18,6 +18,12 @@ lib/
 └── views/             # UI screens and widgets
     ├── screens/       # Main app screens
     └── widgets/       # Reusable widgets
+
+test/
+├── cubit/             # Cubit unit tests (home, recipe detail)
+├── models/            # Model unit tests (recipe model)
+├── services/          # Service unit tests (API, local storage)
+└── widgets/           # Widget tests (cards, buttons)
 ```
 
 ## Key Dependencies
