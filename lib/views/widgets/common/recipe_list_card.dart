@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
@@ -23,40 +24,40 @@ class RecipeListCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('/details/${recipe.id}', extra: recipe),
       child: Container(
-        height: 100,
+        height: SizeConfig.getPercentSize(25),
         decoration: BoxDecoration(
           color: AppColors.darkGrey,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
           border: Border.all(color: AppColors.midGrey),
         ),
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(SizeConfig.getPercentSize(3)),
         child: Row(
           children: [
             // Image
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(2.5)),
               child: Hero(
                 tag: 'recipe_image_${recipe.id}',
                 child: CachedNetworkImage(
                   imageUrl: recipe.thumbUrl,
-                  width: 80,
-                  height: 80,
+                  width: SizeConfig.getPercentSize(20),
+                  height: SizeConfig.getPercentSize(20),
                   fit: BoxFit.cover,
                   placeholder: (_, __) => Container(
-                    width: 80,
-                    height: 80,
+                    width: SizeConfig.getPercentSize(20),
+                    height: SizeConfig.getPercentSize(20),
                     color: AppColors.midGrey,
                   ),
                   errorWidget: (_, __, ___) => Container(
-                    width: 80,
-                    height: 80,
+                    width: SizeConfig.getPercentSize(20),
+                    height: SizeConfig.getPercentSize(20),
                     color: AppColors.midGrey,
                     child: const Icon(Icons.restaurant, color: AppColors.grey),
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: SizeConfig.getPercentSize(3)),
             // Content
             Expanded(
               child: Column(
@@ -65,11 +66,11 @@ class RecipeListCard extends StatelessWidget {
                 children: [
                   Text(
                     recipe.name,
-                    style: AppTextStyles.cardTitle.copyWith(fontSize: 18),
+                    style: AppTextStyles.cardTitle.copyWith(fontSize: SizeConfig.getPercentSize(4.5)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: SizeConfig.getPercentSize(1.5)),
                   if (recipe.category.isNotEmpty && recipe.area.isNotEmpty)
                     Text(
                       '${recipe.category} • ${recipe.area}',

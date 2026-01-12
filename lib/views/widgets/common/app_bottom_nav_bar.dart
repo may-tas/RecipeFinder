@@ -71,7 +71,7 @@ class _NavItem extends StatelessWidget {
             vertical: SizeConfig.getPercentSize(2)),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.midGrey : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,7 @@ class _NavItem extends StatelessWidget {
             Icon(
               icon,
               color: isSelected ? AppColors.white : AppColors.grey,
-              size: 22,
+              size: SizeConfig.getPercentSize(5.5),
             ),
             SizedBox(height: SizeConfig.getPercentSize(0.5)),
             Text(

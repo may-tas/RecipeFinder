@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:posha/constants/app_strings.dart';
+import 'package:posha/utils/size_config.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
@@ -24,29 +25,29 @@ void showFilterBottomSheet(BuildContext context) {
           length: 2,
           child: Container(
             height: MediaQuery.of(context).size.height * 0.7,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.darkGrey,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(SizeConfig.getPercentSize(6))),
             ),
             child: Column(
               children: [
                 // Handle bar
                 Padding(
-                  padding: const EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.only(top: SizeConfig.getPercentSize(3)),
                   child: Container(
-                    width: 40,
-                    height: 4,
+                    width: SizeConfig.getPercentSize(10),
+                    height: SizeConfig.getPercentSize(1),
                     decoration: BoxDecoration(
                       color: AppColors.midGrey,
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(0.5)),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: SizeConfig.getPercentSize(4)),
 
                 // Header with title and clear button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(6)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -64,14 +65,14 @@ void showFilterBottomSheet(BuildContext context) {
                               context.pop();
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.getPercentSize(3),
+                                vertical: SizeConfig.getPercentSize(1.5),
                               ),
                               decoration: BoxDecoration(
                                 color:
                                     AppColors.accentRed.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(2)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -79,9 +80,9 @@ void showFilterBottomSheet(BuildContext context) {
                                   Icon(
                                     Icons.filter_alt_off,
                                     color: AppColors.accentRed,
-                                    size: 16,
+                                    size: SizeConfig.getPercentSize(4),
                                   ),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: SizeConfig.getPercentSize(1)),
                                   Text(AppStrings.clearAll,
                                       style: AppTextStyles.h3.copyWith(
                                           color: AppColors.accentRed,
@@ -95,7 +96,7 @@ void showFilterBottomSheet(BuildContext context) {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: SizeConfig.getPercentSize(4)),
 
                 // Tab bar
                 TabBar(
@@ -135,15 +136,15 @@ class _AreaFilterTab extends StatelessWidget {
       builder: (context, state) {
         if (state.areas.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(SizeConfig.getPercentSize(6)),
             child: Skeletonizer(
               enabled: true,
               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 2.5,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
+                  crossAxisSpacing: SizeConfig.getPercentSize(3),
+                  mainAxisSpacing: SizeConfig.getPercentSize(3),
                 ),
                 itemCount: 12,
                 itemBuilder: (context, index) {
@@ -151,7 +152,7 @@ class _AreaFilterTab extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.midGrey,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
                     ),
                     child: const Text(AppStrings.placeholderAreaName),
                   );
@@ -162,13 +163,13 @@ class _AreaFilterTab extends StatelessWidget {
         }
 
         return Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(SizeConfig.getPercentSize(6)),
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 2.5,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              crossAxisSpacing: SizeConfig.getPercentSize(3),
+              mainAxisSpacing: SizeConfig.getPercentSize(3),
             ),
             itemCount: state.areas.length,
             itemBuilder: (context, index) {
@@ -184,7 +185,7 @@ class _AreaFilterTab extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: isSelected ? AppColors.buttonGradient : null,
                     color: isSelected ? null : AppColors.midGrey,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
                     border: isSelected
                         ? null
                         : Border.all(
@@ -218,15 +219,15 @@ class _IngredientFilterTab extends StatelessWidget {
       builder: (context, state) {
         if (state.ingredients.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(SizeConfig.getPercentSize(6)),
             child: Skeletonizer(
               enabled: true,
               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 2.5,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
+                  crossAxisSpacing: SizeConfig.getPercentSize(3),
+                  mainAxisSpacing: SizeConfig.getPercentSize(3),
                 ),
                 itemCount: 12,
                 itemBuilder: (context, index) {
@@ -234,7 +235,7 @@ class _IngredientFilterTab extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.midGrey,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
                     ),
                     child: const Text(AppStrings.placeholderIngredient),
                   );
@@ -248,13 +249,13 @@ class _IngredientFilterTab extends StatelessWidget {
         final displayIngredients = state.ingredients.take(30).toList();
 
         return Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(SizeConfig.getPercentSize(6)),
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 2.2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              crossAxisSpacing: SizeConfig.getPercentSize(3),
+              mainAxisSpacing: SizeConfig.getPercentSize(3),
             ),
             itemCount: displayIngredients.length,
             itemBuilder: (context, index) {
@@ -271,11 +272,11 @@ class _IngredientFilterTab extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(2)),
                   decoration: BoxDecoration(
                     gradient: isSelected ? AppColors.buttonGradient : null,
                     color: isSelected ? null : AppColors.midGrey,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
                     border: isSelected
                         ? null
                         : Border.all(

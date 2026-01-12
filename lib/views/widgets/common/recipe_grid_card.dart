@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
@@ -40,7 +41,7 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
           ..translate(0.0, _isPressed ? 0.0 : -5.0 * (_isPressed ? 0 : 1)),
         decoration: BoxDecoration(
           color: AppColors.darkGrey,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
           border: Border.all(color: AppColors.midGrey),
           boxShadow: [
             BoxShadow(
@@ -60,8 +61,8 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
                 fit: StackFit.expand,
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(SizeConfig.getPercentSize(3)),
                     ),
                     child: Hero(
                       tag: 'recipe_image_${widget.recipe.id}',
@@ -85,25 +86,25 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    height: 60,
+                    height: SizeConfig.getPercentSize(15),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         gradient: AppColors.imageOverlayGradient,
                         borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(12),
+                          top: Radius.circular(SizeConfig.getPercentSize(3)),
                         ),
                       ),
                     ),
                   ),
                   // Favorite button
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: SizeConfig.getPercentSize(2),
+                    right: SizeConfig.getPercentSize(2),
                     child: AnimatedFavoriteButton(
                       isFavorite: widget.isFavorite,
                       onTap: widget.onFavoriteToggle,
-                      size: 32,
-                      iconSize: 18,
+                      size: SizeConfig.getPercentSize(8),
+                      iconSize: SizeConfig.getPercentSize(4.5),
                       showBorder: false,
                     ),
                   ),
@@ -114,7 +115,7 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(SizeConfig.getPercentSize(2.5)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +126,7 @@ class _RecipeGridCardState extends State<RecipeGridCard> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: SizeConfig.getPercentSize(1)),
                     Text(
                       '${widget.recipe.category} • ${widget.recipe.area}',
                       style: AppTextStyles.cardMeta,
