@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
@@ -31,36 +32,36 @@ class RecipeInstructionsTab extends StatelessWidget {
       children: [
         Text(AppStrings.instructionsSteps(steps.length),
             style: AppTextStyles.h3),
-        const SizedBox(height: 16),
+        SizedBox(height: SizeConfig.getPercentSize(4)),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: steps.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (_, __) => SizedBox(height: SizeConfig.getPercentSize(3)),
           itemBuilder: (context, index) {
             return Container(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(SizeConfig.getPercentSize(5)),
               decoration: BoxDecoration(
                 color: AppColors.midGrey,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: SizeConfig.getPercentSize(8),
+                    height: SizeConfig.getPercentSize(8),
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(2)),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       '${index + 1}',
-                      style: AppTextStyles.button.copyWith(fontSize: 14),
+                      style: AppTextStyles.button.copyWith(fontSize: SizeConfig.getPercentSize(3.5)),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: SizeConfig.getPercentSize(4)),
                   Expanded(
                     child: Text(
                       steps[index],

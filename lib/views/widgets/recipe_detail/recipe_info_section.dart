@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 import '../../../models/recipe_model.dart';
@@ -14,10 +15,10 @@ class RecipeInfoSection extends StatelessWidget {
       children: [
         Text(
           recipe.name,
-          style: AppTextStyles.h1.copyWith(fontSize: 28),
+          style: AppTextStyles.h1.copyWith(fontSize: SizeConfig.getPercentSize(7)),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: SizeConfig.getPercentSize(3)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -25,7 +26,7 @@ class RecipeInfoSection extends StatelessWidget {
               icon: Icons.restaurant_menu_rounded,
               label: recipe.category,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: SizeConfig.getPercentSize(3)),
             _InfoChip(icon: Icons.public_rounded, label: recipe.area),
           ],
         ),
@@ -43,16 +44,16 @@ class _InfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(4), vertical: SizeConfig.getPercentSize(2.5)),
       decoration: BoxDecoration(
         color: AppColors.midGrey,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: AppColors.lightGrey, size: 16),
-          const SizedBox(width: 8),
+          Icon(icon, color: AppColors.lightGrey, size: SizeConfig.getPercentSize(4)),
+          SizedBox(width: SizeConfig.getPercentSize(2)),
           Text(
             label,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white),

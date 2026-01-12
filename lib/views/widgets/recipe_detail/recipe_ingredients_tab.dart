@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
@@ -30,11 +31,11 @@ class RecipeIngredientsTab extends StatelessWidget {
               const Divider(color: AppColors.midGrey, height: 1),
           itemBuilder: (context, index) {
             return Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+              padding: EdgeInsets.symmetric(vertical: SizeConfig.getPercentSize(3), horizontal: SizeConfig.getPercentSize(1)),
               color: index.isEven ? AppColors.darkGrey : AppColors.deepGrey,
               child: Row(
                 children: [
-                  const SizedBox(width: 14),
+                  SizedBox(width: SizeConfig.getPercentSize(3.5)),
                   Expanded(
                     child: Text(
                       recipe.ingredients[index],

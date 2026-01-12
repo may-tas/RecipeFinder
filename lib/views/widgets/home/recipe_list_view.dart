@@ -116,13 +116,13 @@ class _RecipeListViewState extends State<RecipeListView> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(SizeConfig.getPercentSize(4)),
             sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.75,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+                crossAxisSpacing: SizeConfig.getPercentSize(4),
+                mainAxisSpacing: SizeConfig.getPercentSize(4),
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -152,14 +152,14 @@ class _RecipeListViewState extends State<RecipeListView> {
             SliverToBoxAdapter(
               child: isPaginationLoading
                   ? Container(
-                      height: 60,
+                      height: SizeConfig.getPercentSize(15),
                       alignment: Alignment.center,
-                      child: const CircularProgressIndicator(
+                      child:  CircularProgressIndicator(
                         color: AppColors.white,
-                        strokeWidth: 2,
+                        strokeWidth: SizeConfig.getPercentSize(0.5),
                       ),
                     )
-                  : const SizedBox(height: 20),
+                  : SizedBox(height: SizeConfig.getPercentSize(5)),
             ),
         ],
       ),
@@ -178,12 +178,12 @@ class _RecipeListViewState extends State<RecipeListView> {
       enabled: isInitialLoading,
       child: ListView.separated(
         controller: _scrollController,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(SizeConfig.getPercentSize(4)),
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: isInitialLoading
             ? 6
             : displayRecipes.length + (hasReachedMax ? 0 : 1),
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, __) => SizedBox(height: SizeConfig.getPercentSize(3)),
         itemBuilder: (context, index) {
           if (isInitialLoading) {
             return RecipeListCard(recipe: _createPlaceholderRecipe());
@@ -245,20 +245,20 @@ class _RecipeListViewState extends State<RecipeListView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.search_off_rounded, size: 64, color: AppColors.grey),
-              const SizedBox(height: 16),
+              Icon(Icons.search_off_rounded, size: SizeConfig.getPercentSize(16), color: AppColors.grey),
+              SizedBox(height: SizeConfig.getPercentSize(4)),
               Text(
                 AppStrings.noRecipesFound,
                 style: TextStyle(
                   color: AppColors.white,
-                  fontSize: 20,
+                  fontSize: SizeConfig.getPercentSize(5),
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: SizeConfig.getPercentSize(2)),
               Text(
                 AppStrings.tryAdjustingFilters,
-                style: TextStyle(color: AppColors.grey, fontSize: 14),
+                style: TextStyle(color: AppColors.grey, fontSize: SizeConfig.getPercentSize(3.5)),
               ),
             ],
           ),
@@ -274,25 +274,25 @@ class _RecipeListViewState extends State<RecipeListView> {
         children: [
           Icon(
             Icons.error_outline_rounded,
-            size: 64,
+            size: SizeConfig.getPercentSize(16),
             color: AppColors.accentRed,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: SizeConfig.getPercentSize(4)),
           Text(
             AppStrings.failedToLoadRecipes,
             style: TextStyle(
               color: AppColors.white,
-              fontSize: 20,
+              fontSize: SizeConfig.getPercentSize(5),
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: SizeConfig.getPercentSize(2)),
           Text(
             message,
-            style: TextStyle(color: AppColors.grey, fontSize: 14),
+            style: TextStyle(color: AppColors.grey, fontSize: SizeConfig.getPercentSize(3.5)),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: SizeConfig.getPercentSize(6)),
           ElevatedButton(
             onPressed: () => context.read<HomeCubit>().refresh(),
             style: ElevatedButton.styleFrom(

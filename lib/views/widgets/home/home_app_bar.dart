@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 import '../../../constants/app_text_styles.dart';
@@ -12,7 +13,9 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: EdgeInsets.symmetric(
+          horizontal: SizeConfig.getPercentSize(4),
+          vertical: SizeConfig.getPercentSize(5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +36,7 @@ class HomeAppBar extends StatelessWidget {
                           }
                         },
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: SizeConfig.getPercentSize(2)),
                       _ViewToggleButton(
                         icon: Icons.view_list_rounded,
                         isSelected: !state.isGridView,
@@ -71,10 +74,10 @@ class _ViewToggleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(SizeConfig.getPercentSize(2)),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.midGrey : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(2)),
         ),
         child: Icon(
           icon,

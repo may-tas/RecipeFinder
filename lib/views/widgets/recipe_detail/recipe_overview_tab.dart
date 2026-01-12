@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
@@ -45,11 +46,11 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
       children: [
         if (_youtubeController != null) ...[
           Text(AppStrings.watchHowToMake, style: AppTextStyles.h3),
-          const SizedBox(height: 12),
+          SizedBox(height: SizeConfig.getPercentSize(3)),
           AspectRatio(
             aspectRatio: 16 / 9,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
               child: YoutubePlayer(
                 controller: _youtubeController!,
                 showVideoProgressIndicator: true,
@@ -63,10 +64,10 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: SizeConfig.getPercentSize(6)),
         ],
         Text(AppStrings.aboutThisRecipe, style: AppTextStyles.h3),
-        const SizedBox(height: 12),
+        SizedBox(height: SizeConfig.getPercentSize(3)),
         Text(
           'Enjoy making this delicious ${widget.recipe.area} ${widget.recipe.category} dish. Follow the instructions tab for a step-by-step guide.',
           style: AppTextStyles.bodyLarge.copyWith(
@@ -74,7 +75,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
             height: 1.8,
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: SizeConfig.getPercentSize(6)),
         Row(
           children: [
             Expanded(
@@ -84,7 +85,7 @@ class _RecipeOverviewTabState extends State<RecipeOverviewTab> {
                 value: widget.recipe.category,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: SizeConfig.getPercentSize(3)),
             Expanded(
               child: _QuickInfoCard(
                 icon: Icons.public_rounded,
@@ -113,24 +114,24 @@ class _QuickInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(SizeConfig.getPercentSize(4)),
       decoration: BoxDecoration(
         color: AppColors.midGrey,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
         border: Border.all(color: AppColors.grey.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
-          Icon(icon, color: AppColors.grey, size: 24),
-          const SizedBox(height: 8),
+          Icon(icon, color: AppColors.grey, size: SizeConfig.getPercentSize(6)),
+          SizedBox(height: SizeConfig.getPercentSize(2)),
           Text(
             label,
             style: AppTextStyles.caption,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: SizeConfig.getPercentSize(1)),
           Text(
             value,
-            style: AppTextStyles.cardTitle.copyWith(fontSize: 14),
+            style: AppTextStyles.cardTitle.copyWith(fontSize: SizeConfig.getPercentSize(3.5)),
             textAlign: TextAlign.center,
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_strings.dart';
 import '../../../cubit/home_cubit.dart';
 import '../../../cubit/home_state.dart';
@@ -17,7 +18,8 @@ class HomeSearchBar extends StatelessWidget {
         final filterCount = cubit.activeFilterCount;
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding:
+              EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(4)),
           child: AppSearchBar(
             hintText: AppStrings.searchRecipesHint,
             onChanged: (query) => cubit.searchRecipes(query),

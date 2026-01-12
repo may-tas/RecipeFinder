@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:posha/utils/size_config.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_text_styles.dart';
 
@@ -72,10 +73,10 @@ class _AppSearchBarState extends State<AppSearchBar> {
       curve: Curves.easeOut,
       transform: Matrix4.identity()..scale(_isFocused ? 1.02 : 1.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(SizeConfig.getPercentSize(3)),
         border: Border.all(
           color: _isFocused ? AppColors.grey : AppColors.midGrey,
-          width: 2,
+          width: SizeConfig.getPercentSize(0.5),
         ),
         boxShadow: _isFocused
             ? [
@@ -106,16 +107,16 @@ class _AppSearchBarState extends State<AppSearchBar> {
             children: [
               if (_controller.text.isNotEmpty)
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, size: 20),
+                  icon: Icon(Icons.close_rounded, size: SizeConfig.getPercentSize(5)),
                   color: AppColors.grey,
                   onPressed: _clearSearch,
                 ),
               if (widget.onSortTap != null) ...[
                 Container(
-                  height: 24,
-                  width: 1,
+                  height: SizeConfig.getPercentSize(6),
+                  width: SizeConfig.getPercentSize(0.25),
                   color: AppColors.midGrey,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  margin: EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(1)),
                 ),
                 IconButton(
                   icon: AnimatedRotation(
@@ -130,10 +131,10 @@ class _AppSearchBarState extends State<AppSearchBar> {
               ],
               if (widget.onFilterTap != null) ...[
                 Container(
-                  height: 24,
-                  width: 1,
+                  height: SizeConfig.getPercentSize(6),
+                  width: SizeConfig.getPercentSize(0.25),
                   color: AppColors.midGrey,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  margin: EdgeInsets.symmetric(horizontal: SizeConfig.getPercentSize(1)),
                 ),
                 IconButton(
                   icon: Stack(
@@ -142,17 +143,17 @@ class _AppSearchBarState extends State<AppSearchBar> {
                       const Icon(Icons.tune_rounded),
                       if (widget.filterCount > 0)
                         Positioned(
-                          right: -4,
-                          top: -4,
+                          right: SizeConfig.getPercentSize(-1),
+                          top: SizeConfig.getPercentSize(-1),
                           child: Container(
-                            padding: const EdgeInsets.all(4),
+                            padding: EdgeInsets.all(SizeConfig.getPercentSize(1)),
                             decoration: BoxDecoration(
                               color: AppColors.accentRed,
                               shape: BoxShape.circle,
                             ),
-                            constraints: const BoxConstraints(
-                              minWidth: 16,
-                              minHeight: 16,
+                            constraints: BoxConstraints(
+                              minWidth: SizeConfig.getPercentSize(4),
+                              minHeight: SizeConfig.getPercentSize(4),
                             ),
                             child: Center(
                               child: Text(
@@ -179,9 +180,9 @@ class _AppSearchBarState extends State<AppSearchBar> {
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.getPercentSize(4),
+            vertical: SizeConfig.getPercentSize(3.5),
           ),
         ),
       ),
