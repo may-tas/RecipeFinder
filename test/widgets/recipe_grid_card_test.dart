@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:posha/constants/app_colors.dart';
 import 'package:posha/models/recipe_model.dart';
+import 'package:posha/utils/size_config.dart';
 import 'package:posha/views/widgets/common/recipe_grid_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -24,10 +25,16 @@ void main() {
   }) {
     return MaterialApp(
       home: Scaffold(
-        body: RecipeGridCard(
-          recipe: recipe ?? testRecipe,
-          isFavorite: isFavorite,
-          onFavoriteToggle: onFavoriteToggle,
+        body: Builder(
+          builder: (context) {
+            // Initialize SizeConfig for testing
+            SizeConfig().init(context);
+            return RecipeGridCard(
+              recipe: recipe ?? testRecipe,
+              isFavorite: isFavorite,
+              onFavoriteToggle: onFavoriteToggle,
+            );
+          },
         ),
       ),
     );
@@ -111,15 +118,16 @@ void main() {
     testWidgets('should have correct styling', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
-      // Assert
+      // Assert - border radius should be 3% of screen width (800 * 0.03 = 24)
       final container = tester.widget<AnimatedContainer>(
         find.byType(AnimatedContainer),
       );
       final decoration = container.decoration as BoxDecoration;
 
       expect(decoration.color, AppColors.darkGrey);
-      expect(decoration.borderRadius, BorderRadius.circular(12));
+      expect(decoration.borderRadius, BorderRadius.circular(24.0));
       expect(decoration.border, isNotNull);
     });
 

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:posha/models/recipe_model.dart';
+import 'package:posha/utils/size_config.dart';
 import 'package:posha/views/widgets/common/recipe_list_card.dart';
 
 void main() {
@@ -23,10 +24,16 @@ void main() {
   }) {
     return MaterialApp(
       home: Scaffold(
-        body: RecipeListCard(
-          recipe: recipe ?? testRecipe,
-          isFavorite: isFavorite,
-          onFavoriteToggle: onFavoriteToggle,
+        body: Builder(
+          builder: (context) {
+            // Initialize SizeConfig for testing
+            SizeConfig().init(context);
+            return RecipeListCard(
+              recipe: recipe ?? testRecipe,
+              isFavorite: isFavorite,
+              onFavoriteToggle: onFavoriteToggle,
+            );
+          },
         ),
       ),
     );
@@ -81,8 +88,9 @@ void main() {
     testWidgets('should have correct container height', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
-      // Assert
+      // Assert - height should be 25% of screen width (800 * 0.25 = 200)
       final container = tester.widget<Container>(
         find
             .ancestor(
@@ -91,7 +99,7 @@ void main() {
             )
             .first,
       );
-      expect(container.constraints?.maxHeight, 100);
+      expect(container.constraints?.maxHeight, 200.0);
     });
 
     testWidgets('should display hero widget with correct tag', (tester) async {
