@@ -2,6 +2,7 @@
 
 A Flutter recipe browsing app with search, categories, filters, and favorites functionality. Uses the [TheMealDB API](https://www.themealdb.com/api.php) for recipe data.
 
+
 ## Screenshots
 <img width="275" height="648" alt="Screenshot 2026-01-12 at 8 34 40 AM" src="https://github.com/user-attachments/assets/0cf11a15-2624-4511-b7dc-4f1f822e9578" />
 <img width="275" height="648" alt="Screenshot 2026-01-12 at 8 35 00 AM" src="https://github.com/user-attachments/assets/e4474d48-9bb5-4636-96d5-f000e99b0d40" />
@@ -16,7 +17,8 @@ A Flutter recipe browsing app with search, categories, filters, and favorites fu
 ## Recording
 https://github.com/user-attachments/assets/64504619-35fc-456d-a5e7-06cdf2ced0a1
 
-
+## Download APK
+[APK](https://github.com/may-tas/RecipeFinder/blob/main/release-apk/app-release.apk)
 
 ## Folder Structure
 
