@@ -88,11 +88,27 @@ class _RecipeListViewState extends State<RecipeListView> {
           onRefresh: _onRefresh,
           color: AppColors.white,
           backgroundColor: AppColors.darkGrey,
-          child: state.isGridView
-              ? _buildGridView(recipes, state.hasReachedMax, isInitialLoading,
-                  isPaginationLoading)
-              : _buildListView(recipes, state.hasReachedMax, isInitialLoading,
-                  isPaginationLoading),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeInOut,
+            switchOutCurve: Curves.easeInOut,
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale:
+                      Tween<double>(begin: 0.95, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: state.isGridView
+                ? _buildGridView(recipes, state.hasReachedMax, isInitialLoading,
+                    isPaginationLoading, key: const ValueKey('gridView'))
+                : _buildListView(recipes, state.hasReachedMax, isInitialLoading,
+                    isPaginationLoading,
+                    key: const ValueKey('listView')),
+          ),
         );
       },
     );
@@ -102,14 +118,16 @@ class _RecipeListViewState extends State<RecipeListView> {
     List<Recipe> recipes,
     bool hasReachedMax,
     bool isInitialLoading,
-    bool isPaginationLoading,
-  ) {
+    bool isPaginationLoading, {
+    Key? key,
+  }) {
     // Calculate item count:
     // If initial loading -> 6 placeholders
     // If not -> recipes.length
     final int gridItemCount = isInitialLoading ? 6 : recipes.length;
 
     return Skeletonizer(
+      key: key,
       enabled: isInitialLoading,
       child: CustomScrollView(
         controller: _scrollController,
@@ -154,7 +172,7 @@ class _RecipeListViewState extends State<RecipeListView> {
                   ? Container(
                       height: SizeConfig.getPercentSize(15),
                       alignment: Alignment.center,
-                      child:  CircularProgressIndicator(
+                      child: CircularProgressIndicator(
                         color: AppColors.white,
                         strokeWidth: SizeConfig.getPercentSize(0.5),
                       ),
@@ -170,11 +188,13 @@ class _RecipeListViewState extends State<RecipeListView> {
     List<Recipe> recipes,
     bool hasReachedMax,
     bool isInitialLoading,
-    bool isPaginationLoading,
-  ) {
+    bool isPaginationLoading, {
+    Key? key,
+  }) {
     final displayRecipes = recipes;
 
     return Skeletonizer(
+      key: key,
       enabled: isInitialLoading,
       child: ListView.separated(
         controller: _scrollController,
@@ -183,7 +203,8 @@ class _RecipeListViewState extends State<RecipeListView> {
         itemCount: isInitialLoading
             ? 6
             : displayRecipes.length + (hasReachedMax ? 0 : 1),
-        separatorBuilder: (_, __) => SizedBox(height: SizeConfig.getPercentSize(3)),
+        separatorBuilder: (_, __) =>
+            SizedBox(height: SizeConfig.getPercentSize(3)),
         itemBuilder: (context, index) {
           if (isInitialLoading) {
             return RecipeListCard(recipe: _createPlaceholderRecipe());
@@ -245,7 +266,8 @@ class _RecipeListViewState extends State<RecipeListView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.search_off_rounded, size: SizeConfig.getPercentSize(16), color: AppColors.grey),
+              Icon(Icons.search_off_rounded,
+                  size: SizeConfig.getPercentSize(16), color: AppColors.grey),
               SizedBox(height: SizeConfig.getPercentSize(4)),
               Text(
                 AppStrings.noRecipesFound,
@@ -258,7 +280,9 @@ class _RecipeListViewState extends State<RecipeListView> {
               SizedBox(height: SizeConfig.getPercentSize(2)),
               Text(
                 AppStrings.tryAdjustingFilters,
-                style: TextStyle(color: AppColors.grey, fontSize: SizeConfig.getPercentSize(3.5)),
+                style: TextStyle(
+                    color: AppColors.grey,
+                    fontSize: SizeConfig.getPercentSize(3.5)),
               ),
             ],
           ),
@@ -289,7 +313,9 @@ class _RecipeListViewState extends State<RecipeListView> {
           SizedBox(height: SizeConfig.getPercentSize(2)),
           Text(
             message,
-            style: TextStyle(color: AppColors.grey, fontSize: SizeConfig.getPercentSize(3.5)),
+            style: TextStyle(
+                color: AppColors.grey,
+                fontSize: SizeConfig.getPercentSize(3.5)),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: SizeConfig.getPercentSize(6)),
